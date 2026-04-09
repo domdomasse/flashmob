@@ -38,9 +38,13 @@ export async function renderChapter(container, { subject: subjectId, chapter: ch
     }
   }
 
+  const topbarTitle = el('h1', {}, chapter.name);
+  const topbarSection = el('div', { class: 'topbar-section' });
+  const topbarCenter = el('div', { class: 'topbar-center' }, topbarTitle, topbarSection);
+
   const topbar = el('div', { class: 'topbar' },
     el('button', { class: 'btn-back', onClick: () => navigate(subjectId), 'aria-label': 'Retour' }, icon('arrow-left', 20)),
-    el('h1', {}, chapter.name),
+    topbarCenter,
     el('button', { class: 'btn-icon', onClick: shareChapter, 'aria-label': 'Partager' }, icon('share-2', 20))
   );
 
@@ -54,16 +58,18 @@ export async function renderChapter(container, { subject: subjectId, chapter: ch
     tabBar.appendChild(btn);
   }
 
+  // Slot for flashcard filters (between tab bar and content)
+  const filterSlot = el('div', { class: 'tab-filter-slot' });
   const content = el('div', { class: 'tab-content' });
 
   const view = el('div', { class: 'view' });
-  view.append(topbar, tabBar, content);
+  view.append(topbar, tabBar, filterSlot, content);
   container.appendChild(view);
 
   // Render active tab
   const renderer = TAB_RENDERERS[tab];
   if (renderer) {
-    await renderer(content, subjectId, chapterId);
+    await renderer(content, subjectId, chapterId, { filterSlot });
   } else {
     content.appendChild(
       el('div', { class: 'placeholder' },

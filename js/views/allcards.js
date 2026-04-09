@@ -12,17 +12,28 @@ const SORT_OPTIONS = [
   { id: 'category', label: 'Catégorie' },
 ];
 
-export async function renderAllCards(container, { filter }) {
+export async function renderAllCards(container, { filter, subject: subjectFilter }) {
   const catalog = await getCatalog();
 
+  // Determine which subjects to load
+  const subjects = subjectFilter
+    ? catalog.subjects.filter(s => s.id === subjectFilter)
+    : catalog.subjects;
+
+  // Back button: go to subject page if filtered, otherwise home
+  const backRoute = subjectFilter || '';
+  const subjectName = subjectFilter ? subjects[0]?.name : '';
+  const titlePrefix = subjectName ? `${subjectName} — ` : '';
+  const title = filter === 'mastered' ? `${titlePrefix}Maîtrisées` : filter === 'weak' ? `${titlePrefix}À revoir` : `${titlePrefix}Toutes les cartes`;
+
   const topbar = el('div', { class: 'topbar' },
-    el('button', { class: 'btn-back', onClick: () => navigate(''), 'aria-label': 'Retour' }, icon('arrow-left', 20)),
-    el('h1', {}, filter === 'mastered' ? 'Cartes maîtrisées' : filter === 'weak' ? 'Cartes à revoir' : 'Toutes les cartes')
+    el('button', { class: 'btn-back', onClick: () => navigate(backRoute), 'aria-label': 'Retour' }, icon('arrow-left', 20)),
+    el('h1', {}, title)
   );
 
-  // Load all cards
+  // Load cards
   const allItems = [];
-  for (const subject of catalog.subjects) {
+  for (const subject of subjects) {
     for (const chapter of subject.chapters) {
       try {
         const res = await fetch(`data/${subject.id}/${chapter.id}/cards.json`);
@@ -48,7 +59,7 @@ export async function renderAllCards(container, { filter }) {
   if (filter === 'mastered') {
     items = allItems.filter(i => i.progress && i.progress.score >= 2);
   } else if (filter === 'weak') {
-    items = allItems.filter(i => !i.progress || i.progress.score <= 0);
+    items = allItems.filter(i => i.progress && i.progress.score <= 0);
   } else {
     items = [...allItems];
   }

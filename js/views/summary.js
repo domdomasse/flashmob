@@ -1,7 +1,7 @@
 import { getChapterData } from '../data.js';
 import { el } from '../render.js';
 import { loadGlossary, attachGlossaryTooltips } from '../services/glossary-tooltips.js';
-import { buildToc, slugify, buildBackToTop } from '../services/toc.js';
+import { buildToc, slugify, buildBackToTop, activateScrollIndicator } from '../services/toc.js';
 
 function renderMarkdown(text) {
   const blocks = text.split('\n\n');
@@ -78,7 +78,8 @@ export async function renderSummaryTab(container, subjectId, chapterId) {
     container.appendChild(sectionEl);
   }
 
-  // Back to top button
+  // Scroll indicator in topbar + back to top
+  activateScrollIndicator(container, 's-');
   container.appendChild(buildBackToTop());
 
   const glossary = await loadGlossary(subjectId);

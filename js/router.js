@@ -25,7 +25,7 @@ function handleRoute() {
   } else if (segments[0] === 'search') {
     route = { view: 'search', params: { q: params.get('q') || '' } };
   } else if (segments[0] === 'allcards') {
-    route = { view: 'allcards', params: { filter: params.get('filter') || 'all' } };
+    route = { view: 'allcards', params: { filter: params.get('filter') || 'all', subject: params.get('subject') || '' } };
   } else if (segments.length === 1) {
     route = { view: 'subject', params: { subject: segments[0] } };
   } else if (segments[1] === 'glossary') {

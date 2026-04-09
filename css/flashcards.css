@@ -57,7 +57,13 @@
 
 /* ── Filter bar ── */
 .fc-filters-wrap {
-  margin-bottom: 16px;
+  overflow: hidden;
+  max-height: 200px;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+.fc-filters-wrap.collapsed {
+  max-height: 0;
+  opacity: 0;
 }
 .fc-filters {
   display: flex;
@@ -93,6 +99,9 @@
 .fc-card-container {
   width: 100%;
   margin-bottom: 8px;
+  position: relative;
+  -webkit-perspective: 1200px;
+  perspective: 1200px;
 }
 .fc-card {
   width: 100%;
@@ -100,6 +109,7 @@
   -webkit-user-select: none;
   user-select: none;
   touch-action: manipulation;
+  position: relative;
 }
 .fc-card-inner {
   position: relative;
@@ -153,6 +163,30 @@
 [data-theme="light"] .fc-card-back {
   background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
   border-color: rgba(99,102,241,.2);
+}
+
+/* ── Swipe overlays (#3) ── */
+.fc-swipe-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.05s linear;
+  z-index: 5;
+}
+.fc-swipe-overlay.good {
+  background: rgba(34,197,94,.2);
+  border: 2px solid var(--good);
+  color: var(--good);
+}
+.fc-swipe-overlay.bad {
+  background: rgba(244,63,94,.2);
+  border: 2px solid var(--bad);
+  color: var(--bad);
 }
 
 /* ── Category tag ── */
@@ -255,14 +289,17 @@
 }
 .fc-nav button:disabled { opacity: 0.3; cursor: default; }
 
-/* ── End screen ── */
+/* ══════════════════════════════════════
+   END SCREEN (#7 + #8)
+   ══════════════════════════════════════ */
+
 .fc-end {
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 18px;
-  padding: 40px 20px;
+  padding: 32px 20px;
   background: var(--surface);
   border-radius: var(--radius);
   border: 1px solid rgba(56,189,248,.15);
@@ -270,8 +307,78 @@
   width: 100%;
 }
 .fc-end.hidden { display: none; }
-.fc-end h2 { font-size: 1.6rem; }
-.fc-end-stats { color: var(--text-secondary); font-size: 1rem; line-height: 1.7; }
+.fc-end h2 { font-size: 1.4rem; }
+
+/* Result bar */
+.fc-end-stats-wrap { width: 100%; }
+.fc-end-bar {
+  width: 100%;
+  height: 14px;
+  background: var(--surface2);
+  border-radius: 999px;
+  overflow: hidden;
+  display: flex;
+  margin-bottom: 10px;
+}
+.fc-end-bar-fill {
+  height: 100%;
+  width: 0;
+  background: var(--good);
+  border-radius: 999px 0 0 999px;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+.fc-end-bar-bad {
+  height: 100%;
+  width: 0;
+  background: var(--bad);
+  border-radius: 0 999px 999px 0;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1) 0.1s;
+}
+.fc-end-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.fc-end-good { color: var(--good); }
+.fc-end-pct { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+.fc-end-bad { color: var(--bad); }
+
+/* Failed cards list */
+.fc-end-failed {
+  width: 100%;
+  text-align: left;
+}
+.fc-end-failed-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--bad);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.fc-end-failed-card {
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  border-left: 3px solid var(--bad);
+}
+.fc-end-failed-q {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.fc-end-failed-a {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.fc-end-failed-a strong { color: var(--accent); }
+
 .fc-end-actions {
   display: flex;
   gap: 12px;
@@ -296,11 +403,6 @@
 .fc-btn-reset   { background: var(--surface2); color: var(--text-secondary); border: 1px solid var(--border); }
 
 /* ── Favorite button ── */
-.fc-card-container {
-  position: relative;
-  -webkit-perspective: 1200px;
-  perspective: 1200px;
-}
 .fc-fav-btn {
   position: absolute;
   top: 10px;
@@ -315,11 +417,10 @@
   border-radius: 50%;
   cursor: pointer;
   touch-action: manipulation;
-  transition: color var(--transition), background var(--transition);
+  transition: color var(--transition), background var(--transition), opacity 0.35s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Isolate from 3D transforms */
   -webkit-transform-style: flat;
   transform-style: flat;
 }
@@ -332,6 +433,16 @@
 }
 .fc-deck-area.hidden { display: none; }
 .fc-cardlist.hidden { display: none; }
+
+/* ══════════════════════════════════════
+   FOCUS MODE (#10)
+   ══════════════════════════════════════ */
+
+.fc-focus .fc-stats { display: none; }
+.fc-focus .fc-progress-wrap { display: none; }
+.fc-focus .fc-filters-wrap { display: none; }
+.fc-focus .fc-nav { display: none; }
+.fc-focus .fc-swipe-hint { display: none; }
 
 /* ── Responsive ── */
 @media (max-width: 480px) {

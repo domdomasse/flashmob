@@ -11,7 +11,9 @@ export function slugify(text) {
 
 /**
  * Build a collapsible table of contents.
- * Each section group can be expanded/collapsed independently.
+ * - Sections with subsections: click toggles expand/collapse only
+ * - Sections without subsections: click scrolls to section
+ * - Sub-items: click scrolls to sub-section
  */
 export function buildToc(container, sections, prefix = '') {
   const tocList = el('div', { class: 'cours-toc-list' });
@@ -20,21 +22,12 @@ export function buildToc(container, sections, prefix = '') {
     const sectionSlug = prefix + slugify(section.title);
     const hasSubs = section.subsections && section.subsections.length > 0;
 
-    // Section row: chevron + title
     const chevron = hasSubs ? el('span', { class: 'cours-toc-chevron' }, icon('chevron-right', 14)) : null;
 
-    const sectionRow = el('div', { class: 'cours-toc-section' },
-      chevron,
-      el('span', {
-        class: 'cours-toc-section-label',
-        onClick: () => {
-          const target = container.querySelector(`#${sectionSlug}`);
-          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, section.title)
-    );
+    const label = el('span', { class: 'cours-toc-section-label' }, section.title);
 
-    // Subsection list (hidden by default)
+    const sectionRow = el('div', { class: 'cours-toc-section' }, chevron, label);
+
     let subsEl = null;
     if (hasSubs) {
       subsEl = el('div', { class: 'cours-toc-subs collapsed' });
@@ -42,21 +35,27 @@ export function buildToc(container, sections, prefix = '') {
         const subSlug = prefix + slugify(section.title + ' ' + sub.title);
         subsEl.appendChild(el('div', {
           class: 'cours-toc-sub',
-          onClick: () => {
+          onClick: (e) => {
+            e.stopPropagation();
             const target = container.querySelector(`#${subSlug}`);
             if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
         }, sub.title));
       }
 
-      // Toggle subsections on chevron or section row click
+      // Click on section row = toggle only (no scroll)
       const toggle = () => {
         const wasOpen = !subsEl.classList.contains('collapsed');
         subsEl.classList.toggle('collapsed', wasOpen);
         if (chevron) chevron.classList.toggle('open', !wasOpen);
       };
-      if (chevron) chevron.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
       sectionRow.addEventListener('click', toggle);
+    } else {
+      // No subsections: click scrolls to section
+      sectionRow.addEventListener('click', () => {
+        const target = container.querySelector(`#${sectionSlug}`);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     }
 
     const group = el('div', { class: 'cours-toc-group' }, sectionRow);
@@ -97,4 +96,62 @@ export function buildBackToTop() {
   onScroll();
 
   return btn;
+}
+
+/**
+ * Activate the scroll indicator inside the topbar.
+ * Looks for .topbar-section and .topbar in the DOM, updates text on scroll.
+ * Adds .scrolled class to topbar when a section is visible.
+ */
+export function activateScrollIndicator(container, prefix) {
+  let headings = [];
+
+  function collectHeadings() {
+    headings = [];
+    const allH = container.querySelectorAll(`h2[id^="${prefix}"], h3[id^="${prefix}"]`);
+    let lastParent = '';
+    for (const h of allH) {
+      if (h.tagName === 'H2') {
+        lastParent = h.textContent;
+        // Skip h2 — only subsections (h3) are shown in the indicator
+      } else {
+        const match = lastParent.match(/^([IVX]+)\s*[–—-]/);
+        const parentLabel = match ? match[1] : '';
+        headings.push({ el: h, text: h.textContent, parent: parentLabel });
+      }
+    }
+  }
+
+  function onScroll() {
+    if (headings.length === 0) collectHeadings();
+
+    const topbar = document.querySelector('.topbar');
+    const sectionEl = document.querySelector('.topbar-section');
+    if (!topbar || !sectionEl) return;
+
+    const offset = topbar.offsetHeight + 40;
+    const scrollY = window.scrollY + offset;
+    let current = null;
+    for (const h of headings) {
+      if (h.el.offsetTop <= scrollY) current = h;
+      else break;
+    }
+
+    if (current && window.scrollY > 150) {
+      sectionEl.textContent = current.parent ? `${current.parent} – ${current.text}` : current.text;
+      topbar.classList.add('scrolled');
+    } else {
+      sectionEl.textContent = '';
+      topbar.classList.remove('scrolled');
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onCleanup(() => {
+    window.removeEventListener('scroll', onScroll);
+    const topbar = document.querySelector('.topbar');
+    if (topbar) topbar.classList.remove('scrolled');
+  });
+
+  setTimeout(onScroll, 100);
 }

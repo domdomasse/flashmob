@@ -1,5 +1,4 @@
 import { getCatalog } from '../data.js';
-import { getChapterProgress, getWeakCardsCount } from '../store.js';
 import { el } from '../render.js';
 import { navigate } from '../router.js';
 import { icon } from '../icons.js';
@@ -18,61 +17,9 @@ export async function renderHome(container) {
     el('span', { class: 'search-bar-placeholder' }, 'Rechercher un chapitre, un terme...')
   );
 
-  // Dashboard
-  let totalMastered = 0, totalCards = 0, totalWeak = 0;
-  const subjectStats = [];
-
-  for (const subject of catalog.subjects) {
-    let subMastered = 0, subTotal = 0, subWeak = 0;
-    for (const chapter of subject.chapters) {
-      const progress = getChapterProgress(subject.id, chapter.id, chapter.cardCount);
-      subMastered += progress.mastered;
-      subTotal += progress.total;
-      subWeak += getWeakCardsCount(subject.id, chapter.id);
-    }
-    totalMastered += subMastered;
-    totalCards += subTotal;
-    totalWeak += subWeak;
-    subjectStats.push({ subject, mastered: subMastered, total: subTotal, weak: subWeak });
-  }
-
-  const dashboard = el('div', { class: 'section' },
-    el('div', { class: 'section-title' }, 'Progression')
-  );
-
-  if (totalCards > 0) {
-    const statsRow = el('div', { class: 'dashboard-stats-row' });
-    statsRow.appendChild(el('div', {
-      class: 'dashboard-stat clickable',
-      onClick: () => navigate('allcards?filter=mastered')
-    },
-      el('div', { class: 'dashboard-stat-value' }, String(totalMastered)),
-      el('div', { class: 'dashboard-stat-label' }, 'Maîtrisées')
-    ));
-    statsRow.appendChild(el('div', {
-      class: 'dashboard-stat clickable',
-      onClick: () => navigate('allcards?filter=weak')
-    },
-      el('div', { class: 'dashboard-stat-value' }, String(totalWeak)),
-      el('div', { class: 'dashboard-stat-label' }, 'À revoir')
-    ));
-    statsRow.appendChild(el('div', {
-      class: 'dashboard-stat clickable',
-      onClick: () => navigate('allcards?filter=all')
-    },
-      el('div', { class: 'dashboard-stat-value' }, String(totalCards)),
-      el('div', { class: 'dashboard-stat-label' }, 'Total')
-    ));
-    dashboard.appendChild(statsRow);
-  } else {
-    dashboard.appendChild(el('div', { class: 'placeholder', style: 'padding:24px' },
-      el('p', {}, 'Pas encore commencé')
-    ));
-  }
-
   // Subjects grid
   const grid = el('div', { class: 'subject-grid' });
-  for (const { subject, mastered, total } of subjectStats) {
+  for (const subject of catalog.subjects) {
     const count = subject.chapters.length;
     const meta = `${count} chapitre${count > 1 ? 's' : ''}`;
 
@@ -91,6 +38,6 @@ export async function renderHome(container) {
   );
 
   const view = el('div', { class: 'view' });
-  view.append(topbar, searchBar, dashboard, subjects);
+  view.append(topbar, searchBar, subjects);
   container.appendChild(view);
 }

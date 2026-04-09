@@ -20,14 +20,41 @@
   z-index: 100;
 }
 
-.topbar h1 {
-  font-size: 1.2rem;
-  font-weight: 700;
+/* Topbar center: chapter title + optional section indicator */
+.topbar-center {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.topbar h1 {
+  flex: 1;
+  min-width: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: font-size 0.2s ease;
+}
+.topbar-section {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.2s ease, opacity 0.2s ease;
+}
+.topbar.scrolled h1 {
+  font-size: 0.9rem;
+}
+.topbar.scrolled .topbar-section {
+  max-height: 1.2em;
+  opacity: 1;
 }
 
 /* Back button */
@@ -35,8 +62,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--tap-size);
+  gap: 6px;
+  min-width: var(--tap-size);
   height: var(--tap-size);
+  padding: 0;
   border: none;
   background: var(--surface);
   color: var(--text);
@@ -44,8 +73,10 @@
   cursor: pointer;
   flex-shrink: 0;
   touch-action: manipulation;
-  font-size: 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
   transition: all var(--transition);
+  white-space: nowrap;
 }
 .btn-back:active { opacity: 0.7; }
 
@@ -83,6 +114,15 @@
   color: var(--text-muted);
   margin-bottom: 12px;
 }
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.section-header .section-title {
+  margin-bottom: 0;
+}
 
 /* Grid for subject cards */
 .subject-grid {
@@ -118,6 +158,27 @@
   transition: all var(--transition);
   white-space: nowrap;
 }
+/* Filter slot between tabs and content */
+.tab-filter-slot:empty {
+  display: none;
+}
+.tab-filter-slot {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 12px 8px;
+  margin-bottom: 16px;
+  transition: padding 0.3s ease, margin 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
+}
+.tab-filter-slot:has(.fc-filters-wrap.collapsed) {
+  padding: 0;
+  margin-bottom: 0;
+  border-color: transparent;
+  opacity: 0;
+  overflow: hidden;
+  max-height: 0;
+}
+
 .tab-bar button.active {
   color: var(--accent);
   border-bottom-color: var(--accent);

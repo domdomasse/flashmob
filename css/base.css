@@ -71,7 +71,58 @@ html { scroll-behavior: smooth; }
   transform: translateX(-50%) translateY(0);
 }
 
-/* ── Tap feedback ── */
+/* ── Hover & tap feedback ── */
+@media (hover: hover) {
+  /* Navigation buttons */
+  .btn-back:hover, .btn-icon:hover {
+    background: var(--surface2);
+  }
+
+  /* Cards: border highlight + elevation */
+  .chapter-card:hover,
+  .subject-card:hover,
+  .search-result-card:hover,
+  .cardlist-card:hover,
+  .glossary-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 16px rgba(56,189,248,.1);
+  }
+
+  /* Action buttons: scale + brightness */
+  .chapter-revise-btn:hover {
+    transform: scale(1.05);
+    filter: brightness(1.15);
+  }
+
+  /* Stat boxes: border + scale */
+  .dashboard-stat.clickable:hover {
+    border-color: var(--accent);
+    transform: scale(1.03);
+  }
+
+  /* Filter buttons */
+  .fc-filter-btn:hover:not(.active) {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  /* TOC items: background */
+  .cours-toc-section:hover { background: var(--surface2); }
+  .cours-toc-sub:hover { background: var(--surface2); }
+  .cours-toc-toggle:hover { background: var(--surface2); }
+
+  /* Glossary source link */
+  .glossary-source:hover { color: var(--accent); }
+
+  /* List toggle */
+  .fc-list-toggle:hover:not(.active) {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Back to top */
+  .back-to-top:hover { filter: brightness(1.15); }
+}
 @media (hover: none) {
   button:active, a:active, [onclick]:active {
     transition-duration: 0.05s !important;
