@@ -1,0 +1,19 @@
+{
+  "subjects": [
+    {
+      "id": "geo",
+      "name": "Géographie",
+      "icon": "🌍",
+      "color": "#38bdf8",
+      "chapters": [
+        {
+          "id": "chine",
+          "name": "La Chine : recompositions spatiales",
+          "icon": "🗺️",
+          "estimatedTime": { "flashcards": 15, "summary": 20 },
+          "cardCount": 117
+        }
+      ]
+    }
+  ]
+}

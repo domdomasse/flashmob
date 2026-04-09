@@ -1,0 +1,732 @@
+{
+  "categories": [
+    {
+      "id": "intro",
+      "label": "Intro & Contexte"
+    },
+    {
+      "id": "3chines",
+      "label": "Les 3 Chine"
+    },
+    {
+      "id": "inegalites",
+      "label": "Inégalités"
+    },
+    {
+      "id": "metropoles",
+      "label": "Métropoles"
+    },
+    {
+      "id": "rural",
+      "label": "Espaces ruraux"
+    },
+    {
+      "id": "ressources",
+      "label": "Ressources"
+    }
+  ],
+  "cards": [
+    {
+      "id": "intro_01",
+      "cat": "intro",
+      "q": "Quel est le rang de la Chine dans l'économie mondiale ?",
+      "a": "<strong>2e puissance économique mondiale.</strong>"
+    },
+    {
+      "id": "intro_02",
+      "cat": "intro",
+      "q": "Quelle est la superficie de la Chine et son rang mondial ?",
+      "a": "<strong>9 600 000 km²</strong> → 4e État le plus grand du monde."
+    },
+    {
+      "id": "intro_03",
+      "cat": "intro",
+      "q": "Quelle est la population de la Chine et son rang mondial ?",
+      "a": "<strong>1,4 milliard d'habitants</strong> → pays le plus peuplé du monde."
+    },
+    {
+      "id": "intro_04",
+      "cat": "intro",
+      "q": "Quand l'histoire de la Chine aurait-elle débuté et avec quelle dynastie ?",
+      "a": "Vers <strong>2100 av. J.-C.</strong> avec la <strong>dynastie Xia</strong> (empire mythique, non prouvé)."
+    },
+    {
+      "id": "intro_05",
+      "cat": "intro",
+      "q": "En quelle année et par qui la Chine a-t-elle été découpée en provinces pour la première fois ?",
+      "a": "<strong>210 av. J.-C.</strong> avec la <strong>dynastie Qin</strong>."
+    },
+    {
+      "id": "intro_06",
+      "cat": "intro",
+      "q": "Que se passe-t-il au XIXe siècle lors des guerres de l'opium ?",
+      "a": "Défaite des Chinois par les Occidentaux → <strong>ouverture de la Chine aux commerces occidentaux</strong>."
+    },
+    {
+      "id": "intro_07",
+      "cat": "intro",
+      "q": "En quelle année Mao Zedong s'impose-t-il définitivement ?",
+      "a": "<strong>1949</strong>."
+    },
+    {
+      "id": "intro_08",
+      "cat": "intro",
+      "q": "Quel programme Deng Xiaoping lance-t-il en 1978 ?",
+      "a": "Le programme <strong>« réforme et ouverture »</strong> → ouverture économique de la Chine au monde."
+    },
+    {
+      "id": "intro_09",
+      "cat": "intro",
+      "q": "Quel a été le taux de croissance économique de la Chine de 1978 à 2014 ?",
+      "a": "<strong>9,5 % par an</strong>, faisant de la Chine <strong>« l'atelier du monde »</strong>."
+    },
+    {
+      "id": "intro_10",
+      "cat": "intro",
+      "q": "En quelle année l'économie chinoise dépasse-t-elle l'économie japonaise ?",
+      "a": "<strong>2010.</strong>"
+    },
+    {
+      "id": "intro_11",
+      "cat": "intro",
+      "q": "La Chine est-elle plutôt un soft power ou un hard power ? Pourquoi ?",
+      "a": "La Chine est un <strong>soft power</strong> (culture + économie) ≠ hard power (puissance militaire seule)."
+    },
+    {
+      "id": "intro_12",
+      "cat": "intro",
+      "q": "Qu'est-ce que la « recomposition » d'un espace géographique ?",
+      "a": "<strong>Réorganisation d'un espace dans la durée</strong> sous l'effet de plusieurs facteurs intérieurs et/ou extérieurs."
+    },
+    {
+      "id": "intro_13",
+      "cat": "intro",
+      "q": "Quelle est la problématique du cours sur la Chine ?",
+      "a": "Quelles <strong>recompositions géographiques</strong> accompagnent la croissance économique de la Chine dans le cadre de la mondialisation ?"
+    },
+    {
+      "id": "intro_14",
+      "cat": "intro",
+      "q": "Sur quels axes de transport la Chine cherche-t-elle à s'imposer aujourd'hui ?",
+      "a": "Les <strong>nouvelles Routes de la Soie</strong> et la <strong>mer de Chine</strong> (qu'elle revendique face au Japon)."
+    },
+    {
+      "id": "intro_15",
+      "cat": "intro",
+      "q": "Pourquoi Taiwan est-il un sujet de tension géopolitique ?",
+      "a": "Les Chinois <strong>revendiquent Taiwan</strong> et n'approuvent pas son indépendance."
+    },
+    {
+      "id": "intro_16",
+      "cat": "intro",
+      "q": "Quelles sont les caractéristiques politiques négatives souvent associées à la Chine ?",
+      "a": "Répressions, corruption, modèle très peu soucieux de l'environnement."
+    },
+    {
+      "id": "3chines_01",
+      "cat": "3chines",
+      "q": "En combien de grandes zones géographiques le territoire chinois se divise-t-il ?",
+      "a": "<strong>3 zones</strong> : la Chine littorale, la Chine intérieure, la Chine de l'Ouest."
+    },
+    {
+      "id": "3chines_02",
+      "cat": "3chines",
+      "q": "Quelle part du PIB la Chine littorale représente-t-elle ?",
+      "a": "<strong>58 % du PIB</strong>."
+    },
+    {
+      "id": "3chines_03",
+      "cat": "3chines",
+      "q": "Quelle est la concentration des IDE en Chine littorale ?",
+      "a": "<strong>Plus de 80 %</strong> des Investissements Directs Étrangers."
+    },
+    {
+      "id": "3chines_04",
+      "cat": "3chines",
+      "q": "Que signifie IDE ?",
+      "a": "<strong>Investissements Directs Étrangers.</strong>"
+    },
+    {
+      "id": "3chines_05",
+      "cat": "3chines",
+      "q": "Que signifie IDH et que mesure-t-il ?",
+      "a": "<strong>Indice de Développement Humain</strong> : mesure la santé, la richesse et l'éducation."
+    },
+    {
+      "id": "3chines_06",
+      "cat": "3chines",
+      "q": "Quelle est la part de population et du PIB de la Chine intérieure ?",
+      "a": "<strong>49 %</strong> de la population, <strong>34 %</strong> du PIB. Exemple : Chengdu."
+    },
+    {
+      "id": "3chines_07",
+      "cat": "3chines",
+      "q": "Quelle est la Chine de l'Ouest en termes de développement ?",
+      "a": "La plus vaste, la moins peuplée, la moins développée. IDH ≈ 0,7. Économie agricole (coton). Province du Xinjiang avec Urumqi."
+    },
+    {
+      "id": "3chines_08",
+      "cat": "3chines",
+      "q": "Quelle est la part du secteur des services, de l'industrie et de l'agriculture dans le PIB chinois ?",
+      "a": "<strong>Services : 55 %</strong> — Industrie : 37 % — Agriculture : 7 %."
+    },
+    {
+      "id": "3chines_09",
+      "cat": "3chines",
+      "q": "Quelle est la principale caractéristique de la Chine littorale en termes d'IDH ?",
+      "a": "C'est la région avec les <strong>IDH les plus forts</strong> de Chine."
+    },
+    {
+      "id": "3chines_10",
+      "cat": "3chines",
+      "q": "Quel est l'IDH de Hong-Kong et celui du Tibet ?",
+      "a": "Hong-Kong : <strong>IDH 0,9</strong> — Tibet : <strong>IDH 0,6</strong>."
+    },
+    {
+      "id": "3chines_11",
+      "cat": "3chines",
+      "q": "Pourquoi la Chine littorale est-elle la plus dense malgré sa petite superficie ?",
+      "a": "C'est là que se concentrent population, activités économiques, richesse et IDE. Elle est très aménagée pour le transport portuaire."
+    },
+    {
+      "id": "3chines_12",
+      "cat": "3chines",
+      "q": "Qu'est-ce que la politique « Go West » ?",
+      "a": "Politique chinoise visant à <strong>recomposer l'espace d'Est en Ouest</strong> : développer la Chine intérieure et l'Ouest pour réduire les inégalités."
+    },
+    {
+      "id": "3chines_13",
+      "cat": "3chines",
+      "q": "Pourquoi la Chine de l'Ouest est-elle restée longtemps en marge ?",
+      "a": "Situation <strong>ultra-périphérique</strong> : distance et présence du désert du <strong>Takla Makan</strong>."
+    },
+    {
+      "id": "3chines_14",
+      "cat": "3chines",
+      "q": "Quel rôle futur pourrait jouer Urumqi selon le cours ?",
+      "a": "Devenir un <strong>centre, un pôle régional majeur d'Asie centrale</strong>."
+    },
+    {
+      "id": "3chines_15",
+      "cat": "3chines",
+      "q": "Qu'est-ce que la nouvelle Route de la Soie ?",
+      "a": "Un <strong>axe routier et ferroviaire</strong> reliant la Chine à l'Occident via l'Asie centrale."
+    },
+    {
+      "id": "3chines_16",
+      "cat": "3chines",
+      "q": "Quels sont les 3 objectifs de la Chine avec la nouvelle Route de la Soie ?",
+      "a": "1. Accélérer le développement intérieur/Ouest<br>2. Ne plus dépendre des routes maritimes<br>3. Garantir l'accès aux ressources et dominer les voisins asiatiques."
+    },
+    {
+      "id": "3chines_17",
+      "cat": "3chines",
+      "q": "Quelles sont les limites de la nouvelle Route de la Soie ?",
+      "a": "Coûts élevés, coopération difficile avec les pays voisins, infrastructures très coûteuses, dépendance maritime persistante."
+    },
+    {
+      "id": "inegalites_01",
+      "cat": "inegalites",
+      "q": "Quel était le PIB de la Chine en 2023 et quelle part des richesses mondiales représente-t-il ?",
+      "a": "<strong>20 000 milliards de dollars</strong>, soit <strong>18 %</strong> des richesses mondiales."
+    },
+    {
+      "id": "inegalites_02",
+      "cat": "inegalites",
+      "q": "Quelle était la valeur de l'IDH chinois en 1975 ?",
+      "a": "<strong>0,5</strong> en 1975."
+    },
+    {
+      "id": "inegalites_03",
+      "cat": "inegalites",
+      "q": "Qu'est-ce que l'indice de Gini et comment a-t-il évolué en Chine ?",
+      "a": "Mesure des inégalités : <strong>29 en 1980</strong> → <strong>39 en 2019</strong> → les inégalités augmentent."
+    },
+    {
+      "id": "inegalites_04",
+      "cat": "inegalites",
+      "q": "Quelle part de la richesse l'élite urbaine détient-elle en Chine ?",
+      "a": "<strong>44 % de la richesse</strong> pour seulement <strong>1 % de la population</strong>."
+    },
+    {
+      "id": "inegalites_05",
+      "cat": "inegalites",
+      "q": "Le nombre de personnes disposant de plus de 13 M€ a évolué comment en 10 ans en Chine ?",
+      "a": "Il a été <strong>multiplié par 12 en 10 ans</strong>."
+    },
+    {
+      "id": "inegalites_06",
+      "cat": "inegalites",
+      "q": "Quel phénomène les inégalités urbain/rural favorisent-elles ?",
+      "a": "<strong>L'exode rural</strong> : les pop. rurales s'installent en ville, parfois dans des quartiers informels ou bidonvilles."
+    },
+    {
+      "id": "inegalites_07",
+      "cat": "inegalites",
+      "q": "Quelles sont les conséquences de l'exode rural sur l'espace ?",
+      "a": "Fragmentation socio-spatiale, quartiers informels/bidonvilles, <strong>étalement urbain</strong>, précarisation des pop. rurales restantes."
+    },
+    {
+      "id": "inegalites_08",
+      "cat": "inegalites",
+      "q": "Quelle politique le gouvernement chinois a-t-il menée dans les années 80-90 pour réduire les inégalités ?",
+      "a": "Développement des villes et activités économiques en <strong>Chine intérieure et de l'Ouest</strong>, construction d'axes de communication."
+    },
+    {
+      "id": "inegalites_09",
+      "cat": "inegalites",
+      "q": "De combien le PIB de certaines provinces intérieures a-t-il augmenté entre 2007 et 2017 ?",
+      "a": "<strong>x 4</strong>. Ex : Hubei (7-10 Md$) et Guizhou (4-7 Md$)."
+    },
+    {
+      "id": "metropoles_01",
+      "cat": "metropoles",
+      "q": "Définir une métropole.",
+      "a": "Ville très peuplée assurant des <strong>fonctions de commandement</strong> politique, économique, culturel à différentes échelles."
+    },
+    {
+      "id": "metropoles_02",
+      "cat": "metropoles",
+      "q": "Définir la métropolisation.",
+      "a": "Processus de <strong>concentration des activités et des fonctions de commandement</strong> dans un nombre limité de grandes villes mondialisées."
+    },
+    {
+      "id": "metropoles_03",
+      "cat": "metropoles",
+      "q": "Définir la transition urbaine.",
+      "a": "<strong>Passage d'une population rurale à une population urbaine.</strong>"
+    },
+    {
+      "id": "metropoles_04",
+      "cat": "metropoles",
+      "q": "Quand a eu lieu la politique de l'enfant unique en Chine ?",
+      "a": "<strong>1979 – 2015.</strong>"
+    },
+    {
+      "id": "metropoles_05",
+      "cat": "metropoles",
+      "q": "Quelle part de la population chinoise vit en ville ?",
+      "a": "<strong>Plus de 70 %.</strong>"
+    },
+    {
+      "id": "metropoles_06",
+      "cat": "metropoles",
+      "q": "De combien la population chinoise a-t-elle diminué en 2023 ?",
+      "a": "De <strong>plus de 2 millions d'habitants</strong>."
+    },
+    {
+      "id": "metropoles_07",
+      "cat": "metropoles",
+      "q": "Depuis quelle année la croissance démographique chinoise diminue-t-elle ?",
+      "a": "Depuis <strong>2022.</strong>"
+    },
+    {
+      "id": "metropoles_08",
+      "cat": "metropoles",
+      "q": "Qu'est-ce qui nourrit la métropolisation chinoise ?",
+      "a": "L'<strong>exode rural</strong> (migration rapide de la pop. rurale vers les villes)."
+    },
+    {
+      "id": "metropoles_09",
+      "cat": "metropoles",
+      "q": "Quelle est la population et la superficie de Chongqing ?",
+      "a": "<strong>32 M d'habitants</strong> sur <strong>84 000 km²</strong>."
+    },
+    {
+      "id": "metropoles_10",
+      "cat": "metropoles",
+      "q": "Quelle est la population de l'aire urbaine de Shanghai ?",
+      "a": "<strong>≈ 28 millions d'habitants.</strong>"
+    },
+    {
+      "id": "metropoles_11",
+      "cat": "metropoles",
+      "q": "Qu'est-ce que les « Edge cities » ?",
+      "a": "Villes-relais / <strong>Nouveaux centres</strong> en périphérie d'une métropole, offrant emplois, services, loisirs, cultures."
+    },
+    {
+      "id": "metropoles_12",
+      "cat": "metropoles",
+      "q": "Qu'est-ce que le « mitage » ?",
+      "a": "La ville <strong>grignote</strong> les espaces ruraux et agricoles à sa périphérie."
+    },
+    {
+      "id": "metropoles_13",
+      "cat": "metropoles",
+      "q": "Quel est le CBD de Shanghai et quelle est sa fonction principale ?",
+      "a": "<strong>Lujiazui</strong> → pôle financier (comparable à Manhattan, la Défense)."
+    },
+    {
+      "id": "metropoles_14",
+      "cat": "metropoles",
+      "q": "Quel est le district universitaire de Shanghai et quelles universités y trouve-t-on ?",
+      "a": "District de <strong>Yangpu</strong> avec Fudan et Tongji."
+    },
+    {
+      "id": "metropoles_15",
+      "cat": "metropoles",
+      "q": "Quel est le quartier culturel et touristique de Shanghai ?",
+      "a": "<strong>Huangpou.</strong>"
+    },
+    {
+      "id": "metropoles_16",
+      "cat": "metropoles",
+      "q": "Que signifie ZIP dans le contexte portuaire ?",
+      "a": "<strong>Zone Industrialo-Portuaire.</strong>"
+    },
+    {
+      "id": "metropoles_17",
+      "cat": "metropoles",
+      "q": "Quel est le rang du port de Shanghai et quel est son trafic ?",
+      "a": "<strong>1er port du monde</strong> : <strong>36 500 M d'EVP par an.</strong>"
+    },
+    {
+      "id": "metropoles_18",
+      "cat": "metropoles",
+      "q": "Que signifie EVP ?",
+      "a": "<strong>Équivalent Vingt Pieds</strong> : unité de mesure correspondant à 1 conteneur."
+    },
+    {
+      "id": "metropoles_19",
+      "cat": "metropoles",
+      "q": "Quels sont les 3 facteurs d'implantation de Tesla à Shanghai ?",
+      "a": "1. Main d'œuvre abondante et compétitive<br>2. Site disponible en périphérie<br>3. Proximité du <strong>littoral</strong> pour le transport."
+    },
+    {
+      "id": "metropoles_20",
+      "cat": "metropoles",
+      "q": "Définir une conurbation.",
+      "a": "Des <strong>aires urbaines différentes qui fusionnent</strong> par chevauchement."
+    },
+    {
+      "id": "metropoles_21",
+      "cat": "metropoles",
+      "q": "Définir une mégalopole.",
+      "a": "Regroupement de plusieurs métropoles de rang mondial, interconnectées, formant un <strong>réseau urbain de premier plan à échelle mondiale.</strong>"
+    },
+    {
+      "id": "metropoles_22",
+      "cat": "metropoles",
+      "q": "Citer un exemple de mégalopole aux États-Unis.",
+      "a": "De <strong>Boston à Washington</strong> sur la côte Est américaine."
+    },
+    {
+      "id": "metropoles_23",
+      "cat": "metropoles",
+      "q": "Quelle mégalopole est en formation en Chine ?",
+      "a": "De <strong>Shanghai à Hong Kong</strong> sur la Chine littorale."
+    },
+    {
+      "id": "metropoles_24",
+      "cat": "metropoles",
+      "q": "Quels sont les 2 critères d'une mégalopole ?",
+      "a": "1. Regroupement de métropoles très peuplées, dynamiques et attractives.<br>2. Liées par axes de communication nombreux et activités économiques interconnectées générant de fortes mobilités."
+    },
+    {
+      "id": "metropoles_25",
+      "cat": "metropoles",
+      "q": "En 2007, combien de km de lignes à grande vitesse la Chine avait-elle ?",
+      "a": "<strong>700 km</strong> de LGV en 2007."
+    },
+    {
+      "id": "metropoles_26",
+      "cat": "metropoles",
+      "q": "Combien de km de LGV la Chine possède-t-elle en 2025 ?",
+      "a": "<strong>30 000 km</strong> → la plus grande du monde (Pékin – Canton – Shenzhen – Hong-Kong)."
+    },
+    {
+      "id": "metropoles_27",
+      "cat": "metropoles",
+      "q": "En 2018, combien de personnes l'aéroport de Shanghai a-t-il accueillis ?",
+      "a": "<strong>74 millions</strong> (2x plus que les années 2000) : investisseurs, migrants, touristes."
+    },
+    {
+      "id": "metropoles_28",
+      "cat": "metropoles",
+      "q": "Qu'est-ce qu'une « ville-monde » ?",
+      "a": "Métropole qui rayonne à l'<strong>échelle mondiale</strong> sur tous les plans, très bien connectée à l'espace mondial, avec une pop. cosmopolite."
+    },
+    {
+      "id": "metropoles_29",
+      "cat": "metropoles",
+      "q": "Selon quels critères les métropoles mondiales sont-elles hiérarchisées ?",
+      "a": "Activité économique/financière (bourse), R&D, accessibilité, activités culturelles, qualité de vie."
+    },
+    {
+      "id": "metropoles_30",
+      "cat": "metropoles",
+      "q": "Qu'est-ce que le marketing territorial ?",
+      "a": "Stratégie d'une ville pour <strong>renforcer son attractivité</strong> et se distinguer (ex : organiser les JO)."
+    },
+    {
+      "id": "metropoles_31",
+      "cat": "metropoles",
+      "q": "Qu'est-ce qu'un starchitecte ?",
+      "a": "Grande entreprise qui construit des <strong>architectures emblématiques</strong> (ex : Tour Eiffel 312m, Kingdom Tower Djeddah 465m)."
+    },
+    {
+      "id": "metropoles_32",
+      "cat": "metropoles",
+      "q": "Qu'est-ce que « l'économie du savoir » ?",
+      "a": "Activité reposant sur un niveau de connaissance élevé, budget R&D important, employés très qualifiés maîtrisant la haute technologie."
+    },
+    {
+      "id": "metropoles_33",
+      "cat": "metropoles",
+      "q": "Qu'est-ce que l'archipel métropolitain mondial ?",
+      "a": "Réseau des <strong>métropoles mondiales</strong> d'Asie de l'Est (Japon), d'Amérique du Nord et d'Europe occidentale."
+    },
+    {
+      "id": "metropoles_34",
+      "cat": "metropoles",
+      "q": "Quels sont les 3 enjeux pour la Chine à intégrer l'archipel métropolitain mondial ?",
+      "a": "1. Capter l'essentiel des flux mondiaux<br>2. Augmenter le rayonnement mondial de ses métropoles<br>3. Renforcer sa puissance géopolitique."
+    },
+    {
+      "id": "metropoles_35",
+      "cat": "metropoles",
+      "q": "Quelle hiérarchie illustre les différentes échelles des métropoles chinoises ?",
+      "a": "<strong>Urumqi < Pékin < Shanghai</strong> (régionale → nationale → mondiale)."
+    },
+    {
+      "id": "metropoles_36",
+      "cat": "metropoles",
+      "q": "Quels flux les métropoles polarisent-elles ?",
+      "a": "Flux <strong>financiers</strong> (€, $, ¥), flux de <strong>marchandises</strong>, flux de <strong>personnes</strong>."
+    },
+    {
+      "id": "metropoles_37",
+      "cat": "metropoles",
+      "q": "Qu'est-ce que la verticalisation dans les métropoles ?",
+      "a": "Densification des métropoles qui entraîne une croissance en hauteur (gratte-ciels)."
+    },
+    {
+      "id": "metropoles_38",
+      "cat": "metropoles",
+      "q": "Définir un espace de relégation.",
+      "a": "Espace peu attractif dans lequel des populations y résident <strong>sans y choisir</strong> pour des raisons économiques et géographiques."
+    },
+    {
+      "id": "metropoles_39",
+      "cat": "metropoles",
+      "q": "Définir une gated community.",
+      "a": "Communauté <strong>fermée et sécurisée</strong> : résidence de luxe, espaces verts, eaux privées. Ex : Canal Bank et Villas Yosemite (périphérie de Pékin)."
+    },
+    {
+      "id": "metropoles_40",
+      "cat": "metropoles",
+      "q": "Quelle part de la population urbaine chinoise vit dans des quartiers informels ?",
+      "a": "Entre <strong>17 et 30 %</strong> de la pop. urbaine."
+    },
+    {
+      "id": "metropoles_41",
+      "cat": "metropoles",
+      "q": "Qu'est-ce que la gentrification ?",
+      "a": "Processus de transformation d'un quartier populaire en quartier riche avec <strong>exclusion des catégories sociales modestes.</strong>"
+    },
+    {
+      "id": "metropoles_42",
+      "cat": "metropoles",
+      "q": "Quelle différence existe-t-il entre les villes américaines et européennes concernant les inégalités socio-spatiales ?",
+      "a": "USA : <strong>périphéries plus riches que les centres</strong>. Europe : <strong>inverse</strong> (centres plus riches)."
+    },
+    {
+      "id": "metropoles_43",
+      "cat": "metropoles",
+      "q": "Pourquoi trouve-t-on des bidonvilles à Urumqi malgré la croissance ?",
+      "a": "<strong>Croissance démographique très forte</strong> → bidonville à côté même d'un CBD."
+    },
+    {
+      "id": "metropoles_44",
+      "cat": "metropoles",
+      "q": "Quels types d'emplois la métropolisation génère-t-elle structurellement ?",
+      "a": "Des emplois <strong>très qualifiés</strong> (finance, R&D) ET des emplois <strong>peu qualifiés</strong> (livraison, entretien, sécurité, transport)."
+    },
+    {
+      "id": "rural_01",
+      "cat": "rural",
+      "q": "Depuis quelle année plus de 50 % de la pop mondiale vit-elle en ville ?",
+      "a": "Depuis <strong>2007.</strong>"
+    },
+    {
+      "id": "rural_02",
+      "cat": "rural",
+      "q": "Combien d'humains vivront en ville en 2050 ?",
+      "a": "<strong>6,5 milliards</strong> (contre seulement 5 M dans les espaces ruraux)."
+    },
+    {
+      "id": "rural_03",
+      "cat": "rural",
+      "q": "Quelle est la superficie totale des espaces agricoles mondiaux ?",
+      "a": "<strong>4,9 milliards d'hectares.</strong>"
+    },
+    {
+      "id": "rural_04",
+      "cat": "rural",
+      "q": "Combien d'agriculteurs/éleveurs dans le monde ?",
+      "a": "<strong>1,3 milliard.</strong>"
+    },
+    {
+      "id": "rural_05",
+      "cat": "rural",
+      "q": "Quelle part de la population active chinoise travaille dans l'agriculture ?",
+      "a": "<strong>Plus de 20 %</strong> de la pop. active."
+    },
+    {
+      "id": "rural_06",
+      "cat": "rural",
+      "q": "Quelle équation résume le développement selon le cours ?",
+      "a": "<strong>Développement = transition démo = transition éco = transition urbaine</strong> (et simultanément)."
+    },
+    {
+      "id": "rural_07",
+      "cat": "rural",
+      "q": "Comment les espaces ruraux sont-ils perçus dans l'espace des représentations mentales ?",
+      "a": "Stables, immobiles, vieux, traditionnels, archaïques, dépassés → espaces <strong>repoussoirs</strong> tournés vers le passé."
+    },
+    {
+      "id": "rural_08",
+      "cat": "rural",
+      "q": "Quelle est la stratégie des espaces ruraux face à la mondialisation ?",
+      "a": "Demeurer compétitifs en <strong>s'intégrant à la mondialisation</strong>, non contre les villes mais à côté d'elles."
+    },
+    {
+      "id": "rural_09",
+      "cat": "rural",
+      "q": "Définir l'agriculture intensive.",
+      "a": "Concentration de nombreuses semailles/têtes de bétail par hectare. Modèle <strong>productiviste</strong>, cherche le rendement maximum."
+    },
+    {
+      "id": "rural_10",
+      "cat": "rural",
+      "q": "Définir l'agriculture extensive.",
+      "a": "Concentration par hectare <strong>très inférieure</strong> au modèle productiviste. Rendement moins important. Ex : Ranching en Amérique latine."
+    },
+    {
+      "id": "rural_11",
+      "cat": "rural",
+      "q": "Qu'est-ce qu'une filière agro-alimentaire ?",
+      "a": "Ensemble des moyens et acteurs des ≠ étapes de production d'un produit alimentaire : <strong>« de la fourchette du paysan à la fourchette du consommateur ».</strong>"
+    },
+    {
+      "id": "rural_12",
+      "cat": "rural",
+      "q": "Combien d'êtres humains l'agriculture intensive nourrit-elle ?",
+      "a": "<strong>8 milliards</strong> d'êtres humains."
+    },
+    {
+      "id": "rural_13",
+      "cat": "rural",
+      "q": "Qu'est-ce que le Ranching ?",
+      "a": "Élevage bovin <strong>extensif en plein air</strong>, très rentable. Pratiqué en Amérique latine (Brésil) et Amérique du Nord."
+    },
+    {
+      "id": "rural_14",
+      "cat": "rural",
+      "q": "Quel est le type d'agriculture dominant en Chine ?",
+      "a": "Agriculture <strong>modeste, intensive mais irriguée</strong> : riziculture, céréales, et élevage extensif nomade."
+    },
+    {
+      "id": "rural_15",
+      "cat": "rural",
+      "q": "Quelles cultures trouve-t-on en Chine de l'Est et centrale ?",
+      "a": "Blé, riz, millet, pomme de terre, coton, soja, thé."
+    },
+    {
+      "id": "rural_16",
+      "cat": "rural",
+      "q": "Quel type d'élevage est présent en Chine de l'Ouest ?",
+      "a": "<strong>Élevage extensif nomade.</strong>"
+    },
+    {
+      "id": "rural_17",
+      "cat": "rural",
+      "q": "Sur quoi repose le plan quinquénal chinois pour l'agriculture ?",
+      "a": "Sécurité alimentaire, réduction de la pauvreté, développement rural, croissance nationale, infrastructures, production de machines agricoles."
+    },
+    {
+      "id": "rural_18",
+      "cat": "rural",
+      "q": "Quel exemple symbolise l'élevage intensif extrême en Chine ?",
+      "a": "Ferme-usine de <strong>Wuhan : 650 000 porcs sur 20 étages.</strong>"
+    },
+    {
+      "id": "rural_19",
+      "cat": "rural",
+      "q": "Quelle technologie la Chine utilise-t-elle pour ses récoltes de céréales ?",
+      "a": "<strong>Moissonneuses-batteuses dirigées par l'IA.</strong>"
+    },
+    {
+      "id": "rural_20",
+      "cat": "rural",
+      "q": "Comment la Chine garantit-elle ses besoins en produits agricoles qu'elle ne produit pas ?",
+      "a": "Investissements dans des productions du monde entier : vignobles français, soja et viande d'<strong>Argentine et du Brésil.</strong>"
+    },
+    {
+      "id": "rural_21",
+      "cat": "rural",
+      "q": "Quel est l'enjeu central du plan quinquénal pour l'agriculture chinoise ?",
+      "a": "La <strong>sécurité alimentaire</strong> pour 1,4 milliard d'habitants + développement des espaces ruraux."
+    },
+    {
+      "id": "ressources_01",
+      "cat": "ressources",
+      "q": "Quelles ressources naturelles la Chine possède-t-elle ?",
+      "a": "Énergies fossiles (<strong>charbon, pétrole, gaz</strong>) + minéraux + <strong>terres rares</strong> (cuivre, métaux précieux)."
+    },
+    {
+      "id": "ressources_02",
+      "cat": "ressources",
+      "q": "Où se concentrent les terres rares en Chine ?",
+      "a": "Au <strong>Nord de la Chine.</strong>"
+    },
+    {
+      "id": "ressources_03",
+      "cat": "ressources",
+      "q": "Pourquoi la répartition inégale des ressources est-elle importante géographiquement ?",
+      "a": "Elle implique une <strong>spécialisation régionale industrielle</strong>."
+    },
+    {
+      "id": "ressources_04",
+      "cat": "ressources",
+      "q": "La Chine exploite-t-elle aussi des ressources en mer ?",
+      "a": "Oui : notamment le <strong>pétrole off-shore.</strong>"
+    },
+    {
+      "id": "ressources_05",
+      "cat": "ressources",
+      "q": "Quelle région est connue pour son industrie lourde en Chine intérieure ?",
+      "a": "Le bassin du <strong>Sichuan</strong> (charbon, gaz naturel)."
+    },
+    {
+      "id": "ressources_06",
+      "cat": "ressources",
+      "q": "Quel fleuve est marqué par la construction de nombreux barrages ?",
+      "a": "Le <strong>fleuve Yangtsé.</strong>"
+    },
+    {
+      "id": "ressources_07",
+      "cat": "ressources",
+      "q": "Quel district minier est connu pour sa forte pollution ?",
+      "a": "Le district de <strong>Bayon Obo</strong> au Nord de Pékin."
+    },
+    {
+      "id": "ressources_08",
+      "cat": "ressources",
+      "q": "Quelles sont les conséquences environnementales de l'exploitation des ressources en Chine ?",
+      "a": "Pollution de l'air (particules fines), contamination sols et cours d'eau, <strong>déforestation</strong>, érosion des sols, stress hydrique au Nord."
+    },
+    {
+      "id": "ressources_09",
+      "cat": "ressources",
+      "q": "Quelles sont les 3 grandes parties du plan sur les ressources ruraux chinois ?",
+      "a": "I – Des espaces ruraux riches en ressources<br>II – L'exploitation et la répartition des ressources<br>III – Des risques environnementaux et sanitaires à gérer."
+    },
+    {
+      "id": "ressources_10",
+      "cat": "ressources",
+      "q": "Pourquoi la région du Sichuan consomme-t-elle une grande quantité d'eau ?",
+      "a": "À cause de son <strong>industrie lourde intensive</strong> qui nécessite beaucoup d'eau."
+    }
+  ]
+}

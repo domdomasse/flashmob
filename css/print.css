@@ -1,0 +1,4 @@
+@media print {
+  body { background: white; color: black; }
+  .topbar, .tab-bar, .btn-back, .btn-icon { display: none; }
+}

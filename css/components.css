@@ -1,0 +1,154 @@
+/* ── Subject card ── */
+.subject-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all var(--transition);
+  text-align: center;
+  min-height: var(--tap-size);
+}
+.subject-card:active { transform: scale(0.96); opacity: 0.8; }
+.subject-card .icon { font-size: 2rem; }
+.subject-card .name { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+.subject-card .meta { font-size: 0.75rem; color: var(--text-muted); }
+
+/* ── Chapter card ── */
+.chapter-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all var(--transition);
+  min-height: var(--tap-size);
+  margin-bottom: 10px;
+}
+.chapter-card:active { transform: scale(0.98); opacity: 0.8; }
+.chapter-card .icon { font-size: 1.5rem; flex-shrink: 0; }
+.chapter-card .info { flex: 1; min-width: 0; }
+.chapter-card .name { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+.chapter-card .meta { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+
+/* ── Progress bar ── */
+.progress-bar {
+  height: 6px;
+  background: var(--surface2);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.progress-bar .fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* ── Dashboard card ── */
+.dashboard-card {
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.dashboard-card .title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.dashboard-card .value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 4px;
+}
+
+/* ── Toggle switch ── */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  min-height: var(--tap-size);
+}
+.toggle-row .label { font-size: 0.9rem; color: var(--text); }
+.toggle-row .sublabel { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+
+.toggle {
+  position: relative;
+  width: 50px;
+  height: 28px;
+  flex-shrink: 0;
+}
+.toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+.toggle .slider {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--surface2);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all var(--transition);
+  touch-action: manipulation;
+}
+.toggle .slider::before {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: all var(--transition);
+}
+.toggle input:checked + .slider { background: var(--accent); }
+.toggle input:checked + .slider::before { transform: translateX(22px); }
+
+/* ── Font size control ── */
+.font-size-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.font-size-control button {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.font-size-control button:active { opacity: 0.7; }
+.font-size-control .value {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  min-width: 48px;
+  text-align: center;
+}
+
+/* ── Placeholder ── */
+.placeholder {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+.placeholder .icon { font-size: 2.5rem; margin-bottom: 12px; }
+.placeholder p { font-size: 0.9rem; line-height: 1.6; }
