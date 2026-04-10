@@ -13,7 +13,7 @@ html {
   overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
   font-size: calc(16px * var(--font-scale, 1));
-  overscroll-behavior-x: none;
+  overscroll-behavior: none;
 }
 
 body {

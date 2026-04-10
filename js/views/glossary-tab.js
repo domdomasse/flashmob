@@ -1,6 +1,12 @@
 import { el } from '../render.js';
 import { icon } from '../icons.js';
 
+/** Strip accents and return base uppercase letter, or '#' for non-alpha */
+function letterOf(term) {
+  const base = term[0].normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
+  return /^[A-Z]$/.test(base) ? base : '#';
+}
+
 export async function renderGlossaryTab(content, subjectId, chapterId) {
   // Load glossary from dedicated file
   let entries = [];
@@ -34,7 +40,11 @@ export async function renderGlossaryTab(content, subjectId, chapterId) {
   );
 
   // ── Letter index ──
-  const letters = [...new Set(entries.map(e => e.term[0].toUpperCase()))].sort((a, b) => a.localeCompare(b, 'fr'));
+  const letters = [...new Set(entries.map(e => letterOf(e.term)))].sort((a, b) => {
+    if (a === '#') return 1;
+    if (b === '#') return -1;
+    return a.localeCompare(b, 'fr');
+  });
   const letterBar = el('div', { class: 'glossary-letter-bar' });
   const letterBtns = {};
   for (const letter of letters) {
@@ -61,7 +71,7 @@ export async function renderGlossaryTab(content, subjectId, chapterId) {
   }
 
   for (const entry of entries) {
-    const letter = entry.term[0].toUpperCase();
+    const letter = letterOf(entry.term);
     const card = el('div', { class: 'glossary-card' },
       el('div', { class: 'glossary-term' }, entry.term),
       el('div', { class: 'glossary-def' }, entry.def)
