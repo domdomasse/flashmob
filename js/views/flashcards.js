@@ -129,8 +129,6 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
   const badgeGood = el('span', { class: 'fc-badge good clickable', onClick: () => toggleSessionList('good') }, icon('check', 14), ' ', countGood);
   const badgeBad = el('span', { class: 'fc-badge bad clickable', onClick: () => toggleSessionList('bad') }, icon('x', 14), ' ', countBad);
 
-  // Focus exit button (only visible in focus mode)
-  const focusExitBtn = el('button', { class: 'fc-focus-exit', onClick: toggleFocusMode }, icon('minimize-2', 20));
 
   const stats = el('div', { class: 'fc-stats' },
     el('div', { class: 'fc-stats-left' }, filterTriggerWrap, progressCounter),
@@ -221,37 +219,22 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
     favBtn.classList.toggle('active', isFav);
   }}, '☆');
 
-  // Answer zones on the back of the card
-  const zoneBad = el('button', { class: 'fc-zone bad', onClick: (e) => { e.stopPropagation(); if (isFlipped) answerCard(false); } },
-    icon('x', 20), el('span', {}, 'À revoir')
-  );
-  const zoneGood = el('button', { class: 'fc-zone good', onClick: (e) => { e.stopPropagation(); if (isFlipped) answerCard(true); } },
-    icon('check', 20), el('span', {}, 'Je savais')
-  );
-  const answerZones = el('div', { class: 'fc-zones' }, zoneBad, zoneGood);
-
-  const cardHint = el('span', { class: 'fc-hint' }, 'Appuyer pour révéler');
-
-  const skipBtn = el('button', { class: 'fc-skip', onClick: (e) => {
-    e.stopPropagation();
-    if (!animating && !flipping) goNext();
-  }}, icon('skip-forward', 16), ' Passer');
+  const cardHint = el('span', { class: 'fc-hint' }, 'Cliquer pour révéler');
 
   const cardEl = el('div', { class: 'fc-card' },
     el('div', { class: 'fc-card-inner' },
       el('div', { class: 'fc-card-front' },
         categoryTag, favBtn, questionText,
-        cardHint,
-        skipBtn
+        cardHint
       ),
-      el('div', { class: 'fc-card-back' }, answerText, answerZones)
+      el('div', { class: 'fc-card-back' }, answerText)
     ),
     overlayGood, overlayBad
   );
   const cardContainer = el('div', { class: 'fc-card-container' }, cardEl);
 
   const swipeHint = el('p', { class: 'fc-swipe-hint hidden' },
-    'Tap pour retourner \u00a0·\u00a0 Swipe ▼ pour passer \u00a0·\u00a0 Swipe ◀▶ pour répondre'
+    'Cliquer pour retourner \u00a0·\u00a0 Glisser ▼ pour passer \u00a0·\u00a0 Glisser ◀▶ pour répondre'
   );
 
   // Actions
@@ -273,7 +256,7 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
     el('div', { class: 'fc-end-actions' }, btnRestart, btnRetry, btnReset)
   );
 
-  const deckArea = el('div', { class: 'fc-deck-area' }, focusExitBtn, cardContainer, swipeHint, endEl);
+  const deckArea = el('div', { class: 'fc-deck-area' }, cardContainer, swipeHint, endEl);
 
   container.append(stats, progressBar, sessionWrap, deckArea, cardListEl);
 
@@ -288,6 +271,15 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
     focusToggleBtn.classList.toggle('active', focusMode);
     document.getElementById('app').classList.toggle('fc-focus', focusMode);
   }
+
+  // Exit focus mode by clicking outside the card
+  let lastDragTime = 0;
+  container.addEventListener('click', (e) => {
+    if (!focusMode) return;
+    if (Date.now() - lastDragTime < 300) return;
+    if (e.target.closest('.fc-card') || e.target.closest('.fc-end') || e.target.closest('.fc-list-toggle') || e.target.closest('.fc-stats') || e.target.closest('.fc-deck-area')) return;
+    toggleFocusMode();
+  });
 
   // ══════════════════════════════════════
   // Filter collapse (#9)
@@ -489,8 +481,8 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
     flipping = true;
     isFlipped = !isFlipped;
     cardEl.classList.toggle('flipped', isFlipped);
-    if (isFlipped) swipeHint.textContent = '◀ À revoir \u00a0·\u00a0 tap pour retourner \u00a0·\u00a0 Je savais ▶';
-    else swipeHint.textContent = '◀ swipe pour naviguer \u00a0·\u00a0 tap pour retourner ▶';
+    if (isFlipped) swipeHint.textContent = '◀ À revoir \u00a0·\u00a0 Je savais ▶';
+    else swipeHint.textContent = '▼ Glisser pour passer';
     setTimeout(() => { flipping = false; }, 550);
   }
 
@@ -660,6 +652,7 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
     const dy = e.changedTouches[0].clientY - tY;
     const ax = Math.abs(dx), ay = Math.abs(dy);
     touchUsed = true;
+    if (dragDir) lastDragTime = Date.now();
 
     // Reset overlays
     overlayGood.style.opacity = '0';
@@ -671,7 +664,6 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
       cardEl.style.transform = '';
       cardEl.style.opacity = '';
       const target = e.target;
-      if (target.closest && (target.closest('.fc-zone') || target.closest('.fc-skip'))) return;
       flipCard();
     }
     // Horizontal swipe when flipped → answer
@@ -701,8 +693,113 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
   }, { passive: false });
 
   cardEl.addEventListener('click', () => {
-    if (touchUsed) { touchUsed = false; return; }
+    if (touchUsed || mouseDragged) { touchUsed = false; mouseDragged = false; return; }
     flipCard();
+  });
+
+  // ══════════════════════════════════════
+  // Mouse drag (desktop)
+  // — flipped: drag left/right to answer
+  // — not flipped: drag down to skip
+  // ══════════════════════════════════════
+
+  let mouseDown = false, mX = 0, mY = 0, mouseDragged = false, mouseDragDir = null;
+
+  cardEl.addEventListener('mousedown', e => {
+    if (animating) return;
+    mouseDown = true;
+    mouseDragged = false;
+    mouseDragDir = null;
+    mX = e.clientX;
+    mY = e.clientY;
+    cardEl.style.transition = 'none';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!mouseDown) return;
+    const dx = e.clientX - mX;
+    const dy = e.clientY - mY;
+    const ax = Math.abs(dx), ay = Math.abs(dy);
+
+    // Lock direction
+    if (!mouseDragDir && (ax > 5 || ay > 5)) {
+      mouseDragDir = ax > ay ? 'h' : 'v';
+    }
+    if (!mouseDragDir) return;
+    mouseDragged = true;
+
+    // Horizontal drag when flipped → answer
+    if (mouseDragDir === 'h' && isFlipped) {
+      const rotation = Math.max(-10, Math.min(10, dx * 0.06));
+      cardEl.style.transform = `translateX(${dx}px) rotate(${rotation}deg)`;
+      const intensity = Math.min(ax / 120, 1);
+      if (dx > 0) {
+        overlayGood.style.opacity = String(intensity);
+        overlayBad.style.opacity = '0';
+      } else {
+        overlayBad.style.opacity = String(intensity);
+        overlayGood.style.opacity = '0';
+      }
+    }
+
+    // Vertical drag down when not flipped → skip
+    if (mouseDragDir === 'v' && dy > 5 && !isFlipped) {
+      const clamped = Math.min(dy, 100);
+      cardEl.style.transform = `translateY(${clamped}px)`;
+      cardEl.style.opacity = String(1 - clamped / 200);
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!mouseDown) return;
+    mouseDown = false;
+    if (mouseDragged) lastDragTime = Date.now();
+    overlayGood.style.opacity = '0';
+    overlayBad.style.opacity = '0';
+
+    if (!mouseDragged) {
+      cardEl.style.transition = '';
+      cardEl.style.transform = '';
+      cardEl.style.opacity = '';
+      return;
+    }
+
+    // Horizontal answer
+    if (mouseDragDir === 'h' && isFlipped) {
+      const dx = parseFloat(cardEl.style.transform.match(/translateX\((.+?)px\)/)?.[1] || 0);
+      if (Math.abs(dx) > 30) {
+        answerCard(dx > 0);
+      } else {
+        cardEl.style.transition = 'transform 0.2s ease';
+        cardEl.style.transform = '';
+      }
+    }
+    // Vertical skip
+    else if (mouseDragDir === 'v' && !isFlipped) {
+      const dy = parseFloat(cardEl.style.transform.match(/translateY\((.+?)px\)/)?.[1] || 0);
+      if (dy > 50) {
+        cardEl.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+        cardEl.style.transform = 'translateY(120px)';
+        cardEl.style.opacity = '0';
+        setTimeout(() => {
+          cardEl.style.transition = '';
+          cardEl.style.transform = '';
+          cardEl.style.opacity = '';
+          goNext();
+        }, 200);
+      } else {
+        cardEl.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+        cardEl.style.transform = '';
+        cardEl.style.opacity = '';
+      }
+    }
+    // Snap back
+    else {
+      cardEl.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+      cardEl.style.transform = '';
+      cardEl.style.opacity = '';
+    }
   });
 
   // ══════════════════════════════════════
@@ -727,6 +824,7 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
     if ((e.key === 'b' || e.key === 'B') && isFlipped) answerCard(false);
     if (e.key === 's' || e.key === 'S') { if (!isFlipped) goNext(); }
     if (e.key === 'f' || e.key === 'F') favBtn.click();
+    if (e.key === 'Escape' && focusMode) toggleFocusMode();
   }, { signal: abortCtrl.signal });
 
   // ══════════════════════════════════════

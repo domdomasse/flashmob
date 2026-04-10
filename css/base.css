@@ -153,11 +153,6 @@ html { scroll-behavior: smooth; }
   .fc-focus-exit:hover { border-color: var(--accent); color: var(--accent); }
 
   /* Skip button */
-  .fc-skip:hover { border-color: var(--accent); color: var(--accent); }
-
-  /* Answer zones */
-  .fc-zone.bad:hover { background: rgba(244,63,94,.15); }
-  .fc-zone.good:hover { background: rgba(34,197,94,.15); }
 
   /* Bottom nav */
   .bottom-nav-btn:hover:not(.active) { color: var(--text-secondary); }

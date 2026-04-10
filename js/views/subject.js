@@ -68,7 +68,7 @@ export async function renderSubject(container, { subject: subjectId }) {
       onClick: () => navigate(`${subjectId}/${chapter.id}`)
     },
       el('div', { class: 'ch-card-header' },
-        el('span', { class: 'ch-card-icon' }, chapter.icon || '📄'),
+        el('span', { class: 'ch-card-icon' }, icon(chapter.icon || 'file-text', 24)),
         el('div', { class: 'ch-card-info' },
           el('div', { class: 'ch-card-title' }, chapter.name),
           el('div', { class: 'ch-card-meta' },

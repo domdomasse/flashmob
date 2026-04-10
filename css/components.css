@@ -15,7 +15,7 @@
   min-height: var(--tap-size);
 }
 .subject-card:active { transform: scale(0.96); opacity: 0.7; }
-.subject-card .icon { font-size: 2rem; }
+.subject-card .icon { font-size: 2rem; color: var(--accent); }
 .subject-card .name { font-size: 0.9rem; font-weight: 600; color: var(--text); }
 .subject-card .meta { font-size: 0.75rem; color: var(--text-muted); }
 
@@ -46,6 +46,10 @@
   flex-shrink: 0;
   width: 40px;
   text-align: center;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .ch-card-info {
   flex: 1;
