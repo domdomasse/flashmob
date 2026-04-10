@@ -13,8 +13,14 @@
   scrollbar-width: none;
 }
 .fc-stats::-webkit-scrollbar { display: none; }
-.fc-stats-left { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-.fc-badges { display: flex; gap: 6px; align-items: center; flex-shrink: 0; margin-left: auto; }
+
+@media (min-width: 1024px) {
+  .fc-stats {
+    overflow: visible;
+  }
+}
+.fc-stats-left { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.fc-badges { display: flex; gap: 10px; align-items: center; flex-shrink: 0; margin-left: auto; }
 
 /* ── Progress counter ── */
 .fc-counter {

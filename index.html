@@ -11,6 +11,9 @@
   <title>Flashmob</title>
   <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/icons/icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Unbounded:wght@700;800&display=swap">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
@@ -22,9 +25,17 @@
 </head>
 <body>
   <div id="app">
-    <div style="text-align:center;padding:60px 20px;color:#94a3b8;">
-      <p style="font-size:1.5rem;margin-bottom:8px;">⚡</p>
-      <p>Chargement...</p>
+    <div class="splash">
+      <div class="splash-logo">
+        <svg class="splash-circle" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="44" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <svg class="splash-bolt" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          <circle cx="12" cy="12" r="4"/>
+        </svg>
+      </div>
+      <p class="splash-title">Flashmob</p>
     </div>
   </div>
   <div id="toast"></div>

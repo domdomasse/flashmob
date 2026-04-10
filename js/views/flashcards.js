@@ -119,6 +119,14 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
     filterTrigger.classList.remove('active');
   }
 
+  // Swipe left to close filter drawer
+  let fmTX = 0;
+  filterMenu.addEventListener('touchstart', e => { fmTX = e.changedTouches[0].clientX; }, { passive: true });
+  filterMenu.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - fmTX;
+    if (dx < -60) closeFilterMenu();
+  }, { passive: true });
+
   // Filter trigger button (in stats bar)
   const filterLabel = el('span', { class: 'fc-filter-label' }, 'Toutes');
   const filterTrigger = el('button', { class: 'fc-filter-trigger', onClick: toggleFilterMenu },

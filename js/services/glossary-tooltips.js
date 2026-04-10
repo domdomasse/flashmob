@@ -56,8 +56,8 @@ function processTextNodes(element, regex, glossary) {
   while (walker.nextNode()) nodes.push(walker.currentNode);
 
   for (const node of nodes) {
-    // Skip if parent is already a glossary-link or a strong/a tag
-    if (node.parentElement.closest('.glossary-link, a, strong')) continue;
+    // Skip if parent is already a glossary-link or a link
+    if (node.parentElement.closest('.glossary-link, a')) continue;
 
     const text = node.textContent;
     if (!regex.test(text)) continue;
@@ -80,9 +80,16 @@ function processTextNodes(element, regex, glossary) {
       span.textContent = match[0];
       span.dataset.term = entry.term;
       span.dataset.def = entry.def;
-      span.addEventListener('click', showTooltip);
+      // Desktop: hover to show/hide
       span.addEventListener('mouseenter', showTooltip);
       span.addEventListener('mouseleave', dismissTooltip);
+      // Block click (no action needed, hover handles it on desktop)
+      span.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); });
+      // Mobile: tap to show
+      span.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        showTooltip(e);
+      }, { passive: false });
       fragment.appendChild(span);
 
       lastIndex = regex.lastIndex;

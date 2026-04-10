@@ -370,25 +370,77 @@
 .search-input::placeholder { color: var(--text-muted); }
 
 .search-result-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 14px 16px;
   background: var(--surface);
   border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
   border-radius: var(--radius-sm);
   margin-bottom: 8px;
   cursor: pointer;
   touch-action: manipulation;
   transition: all var(--transition);
 }
+.search-result-card.glossary-result {
+  border-left-color: var(--accent2);
+}
 .search-result-card:active { opacity: 0.7; }
+.search-result-icon {
+  flex-shrink: 0;
+  color: var(--accent);
+  display: flex;
+}
+.search-result-card.glossary-result .search-result-icon {
+  color: var(--accent2);
+}
+.search-result-body {
+  flex: 1;
+  min-width: 0;
+}
 .search-result-q {
   font-size: 0.9rem;
+  font-weight: 600;
   color: var(--text);
   line-height: 1.5;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
+}
+.search-result-q mark {
+  background: rgba(56,189,248,.2);
+  color: var(--accent);
+  border-radius: 2px;
+  padding: 0 1px;
 }
 .search-result-meta {
   font-size: 0.75rem;
   color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Search section badges */
+.search-section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  margin-top: 4px;
+}
+.search-section-badge.chapter {
+  background: rgba(56,189,248,.1);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+}
+.search-section-badge.glossary {
+  background: rgba(129,140,248,.1);
+  color: var(--accent2);
+  border: 1px solid rgba(129,140,248,.3);
 }
 
 /* ══════════════════════════════════════
@@ -423,6 +475,36 @@
 }
 .glossary-search-input::placeholder { color: var(--text-muted); }
 .glossary-search:focus-within { border-color: var(--accent); }
+
+/* Clear button */
+.glossary-search-clear {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: var(--surface2);
+  color: var(--text-muted);
+  border-radius: 50%;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all var(--transition);
+}
+.glossary-search-clear:active { opacity: 0.7; }
+.glossary-search-clear.hidden { display: none; }
+
+/* Search highlight */
+.glossary-card mark {
+  background: rgba(56,189,248,.2);
+  color: var(--accent);
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+/* Relevance ordering within groups */
+.glossary-group { display: flex; flex-direction: column; }
 
 /* Letter bar */
 .glossary-letter-bar {
@@ -507,15 +589,12 @@
 
 /* ── Glossary inline links (in Cours/Résumé) ── */
 .glossary-link {
-  color: var(--accent);
+  color: inherit;
   text-decoration: underline;
   text-decoration-style: dotted;
+  text-decoration-color: var(--text-muted);
   text-underline-offset: 3px;
-  cursor: pointer;
-  touch-action: manipulation;
-}
-.glossary-link:active {
-  opacity: 0.7;
+  cursor: help;
 }
 
 /* ── Glossary tooltip ── */

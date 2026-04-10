@@ -7,14 +7,20 @@ export async function renderHome(container) {
   const catalog = await getCatalog();
 
   const topbar = el('div', { class: 'topbar' },
-    el('h1', {}, icon('zap', 20), ' Flashmob'),
+    el('h1', { class: 'app-title' }, icon('bolt', 24), 'Flashmob'),
     el('button', { class: 'btn-icon', onClick: () => navigate('settings'), 'aria-label': 'Réglages' }, icon('settings', 22))
   );
 
-  // Search bar
-  const searchBar = el('div', { class: 'search-bar', onClick: () => navigate('search') },
-    el('span', { class: 'search-bar-icon' }, icon('search', 18)),
-    el('span', { class: 'search-bar-placeholder' }, 'Rechercher un chapitre, un terme...')
+  // Search bar (same style as glossary/search page)
+  const fakeInput = el('input', {
+    class: 'glossary-search-input',
+    type: 'text',
+    placeholder: 'Rechercher un chapitre, un terme...',
+    readOnly: true
+  });
+  const searchBar = el('div', { class: 'glossary-search', onClick: () => navigate('search') },
+    el('span', { class: 'glossary-search-icon' }, icon('search', 16)),
+    fakeInput
   );
 
   // Subjects grid
