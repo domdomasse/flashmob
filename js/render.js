@@ -1,4 +1,4 @@
-import { refreshIcons } from './icons.js';
+import { icon, refreshIcons } from './icons.js';
 
 const app = document.getElementById('app');
 const cleanups = [];
@@ -18,6 +18,11 @@ export function getCleanupMark() {
 }
 
 export async function renderView(viewFn, params) {
+  // Cacher immédiatement via style inline (priorité max, effet instantané)
+  app.style.visibility = 'hidden';
+  app.style.opacity = '0';
+  app.classList.remove('fade-in');
+
   while (cleanups.length) cleanups.pop()();
   app.innerHTML = '';
   try {
@@ -25,16 +30,18 @@ export async function renderView(viewFn, params) {
   } catch (err) {
     console.error('[Flashmob]', err);
     app.appendChild(el('div', { style: 'text-align:center;padding:60px 20px;color:#f43f5e;' },
-      el('p', { style: 'font-size:1.5rem;margin-bottom:8px;' }, '⚠️'),
+      el('p', { style: 'font-size:1.5rem;margin-bottom:8px;' }, icon('alert-triangle', 28)),
       el('p', {}, 'Erreur de chargement.'),
       el('p', { style: 'font-size:0.8rem;color:#94a3b8;margin-top:8px;' }, String(err))
     ));
   }
   refreshIcons();
   window.scrollTo(0, 0);
-  app.classList.remove('fade-in');
-  void app.offsetWidth;
+
+  // Révéler et fade-in en un seul batch (pas de reflow entre les deux)
   app.classList.add('fade-in');
+  app.style.visibility = '';
+  app.style.opacity = '';
 }
 
 export function el(tag, attrs = {}, ...children) {

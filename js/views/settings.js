@@ -89,7 +89,7 @@ export async function renderSettings(container) {
     a.href = url; a.download = 'flashmob-progression.json';
     a.click();
     URL.revokeObjectURL(url);
-  }}, '📥 Exporter ma progression');
+  }}, icon('download', 16), ' Exporter ma progression');
 
   const btnImport = el('button', { class: 'settings-btn', onClick: () => {
     const fileInput = document.createElement('input');
@@ -110,7 +110,7 @@ export async function renderSettings(container) {
       reader.readAsText(file);
     });
     fileInput.click();
-  }}, '📤 Importer une progression');
+  }}, icon('upload', 16), ' Importer une progression');
 
   const btnResetAll = el('button', { class: 'settings-btn danger', onClick: () => {
     if (confirm('Effacer TOUTE ta progression et tes réglages ?')) {
@@ -118,7 +118,7 @@ export async function renderSettings(container) {
       window.__applyPrefs();
       navigate('');
     }
-  }}, '🗑️ Tout effacer');
+  }}, icon('trash-2', 16), ' Tout effacer');
 
   const dataSection = el('div', { class: 'section', style: 'margin-top: 24px' },
     el('div', { class: 'section-title' }, 'Mes données'),

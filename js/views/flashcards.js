@@ -137,13 +137,19 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
   const badgeGood = el('span', { class: 'fc-badge good clickable', onClick: () => toggleSessionList('good') }, icon('check', 14), ' ', countGood);
   const badgeBad = el('span', { class: 'fc-badge bad clickable', onClick: () => toggleSessionList('bad') }, icon('x', 14), ' ', countBad);
 
+  const printBtn = el('button', {
+    class: 'fc-list-toggle',
+    onClick: () => printCards(getFilteredAll(), categories),
+    'aria-label': 'Imprimer'
+  }, icon('printer', 16));
 
   const stats = el('div', { class: 'fc-stats' },
     el('div', { class: 'fc-stats-left' }, filterTriggerWrap, progressCounter),
     el('div', { class: 'fc-badges' },
       badgeGood, badgeBad,
-      infoBtn,
       listToggleBtn,
+      infoBtn,
+      printBtn,
       focusToggleBtn
     )
   );
@@ -192,7 +198,7 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
               el('div', { class: 'cardlist-q' }, card.q)
             ),
             el('span', { class: 'cardlist-score ' + (type === 'good' ? 'good' : 'bad') },
-              type === 'good' ? '✓' : '✗')
+              icon(type === 'good' ? 'check' : 'x', 14))
           ),
           answerDiv
         ));
@@ -219,13 +225,17 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
   const overlayGood = el('div', { class: 'fc-swipe-overlay good' }, icon('check', 32));
   const overlayBad = el('div', { class: 'fc-swipe-overlay bad' }, icon('x', 32));
 
+  function updateFavIcon(isFav) {
+    favBtn.innerHTML = '';
+    favBtn.appendChild(icon(isFav ? 'star' : 'star', 18));
+    favBtn.classList.toggle('active', isFav);
+  }
   const favBtn = el('button', { class: 'fc-fav-btn', onClick: (e) => {
     e.stopPropagation();
     if (currentIdx >= deck.length) return;
     const isFav = toggleFavorite(storeId(deck[currentIdx]));
-    favBtn.textContent = isFav ? '★' : '☆';
-    favBtn.classList.toggle('active', isFav);
-  }}, '☆');
+    updateFavIcon(isFav);
+  }}, icon('star', 18));
 
   const cardHint = el('span', { class: 'fc-hint' }, 'Cliquer pour révéler');
 
@@ -242,7 +252,7 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
   const cardContainer = el('div', { class: 'fc-card-container' }, cardEl);
 
   const swipeHint = el('p', { class: 'fc-swipe-hint hidden' },
-    'Cliquer pour retourner \u00a0·\u00a0 Glisser ▼ pour passer \u00a0·\u00a0 Glisser ◀▶ pour répondre'
+    'Cliquer pour retourner \u00a0·\u00a0 Glisser ', icon('arrow-down', 12), ' pour passer \u00a0·\u00a0 Glisser ', icon('arrow-left', 12), icon('arrow-right', 12), ' pour répondre'
   );
 
   // Actions
@@ -290,13 +300,6 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
   });
 
   // ══════════════════════════════════════
-  // Filter collapse (#9)
-  // ══════════════════════════════════════
-
-  // No-ops — filter collapse no longer needed with drawer/dropdown
-  function collapseFilters() {}
-  function expandFilters() {}
-
   // ══════════════════════════════════════
   // Card list
   // ══════════════════════════════════════
@@ -307,7 +310,7 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
     deckArea.classList.toggle('hidden', listMode);
     cardListEl.classList.toggle('hidden', !listMode);
     sessionWrap.classList.add('hidden'); sessionListType = null;
-    if (listMode) { renderCardList(); expandFilters(); }
+    if (listMode) { renderCardList(); }
   }
 
   function renderCardList() {
@@ -417,7 +420,7 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
     if (listMode) { renderCardList(); }
     else {
       const filtered = getFiltered();
-      if (filtered.length === 0) initEmpty(id === 'favorites' ? 'Aucun favori pour l\'instant. Appuie sur ☆ pour en ajouter.' : 'Aucune carte dans cette catégorie.');
+      if (filtered.length === 0) initEmpty(id === 'favorites' ? 'Aucun favori pour l\'instant. Appuie sur l\'étoile pour en ajouter.' : 'Aucune carte dans cette catégorie.');
       else initDeck(filtered);
     }
   }
@@ -438,7 +441,6 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
     }
     emptyEl.querySelector('p').textContent = msg;
     emptyEl.style.display = '';
-    expandFilters();
     refreshIcons();
   }
 
@@ -473,8 +475,7 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
 
     const progress = getCardProgress(storeId(card));
     const isFav = progress && progress.fav;
-    favBtn.textContent = isFav ? '★' : '☆';
-    favBtn.classList.toggle('active', !!isFav);
+    updateFavIcon(!!isFav);
 
     progressText.textContent = `${currentIdx + 1} / ${deck.length}`;
     progressFill.style.width = (currentIdx / deck.length * 100) + '%';
@@ -489,8 +490,13 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
     flipping = true;
     isFlipped = !isFlipped;
     cardEl.classList.toggle('flipped', isFlipped);
-    if (isFlipped) swipeHint.textContent = '◀ À revoir \u00a0·\u00a0 Je savais ▶';
-    else swipeHint.textContent = '▼ Glisser pour passer';
+    if (isFlipped) {
+      swipeHint.innerHTML = '';
+      swipeHint.append(icon('arrow-left', 12), ' À revoir \u00a0·\u00a0 Je savais ', icon('arrow-right', 12));
+    } else {
+      swipeHint.innerHTML = '';
+      swipeHint.append(icon('arrow-down', 12), ' Glisser pour passer');
+    }
     setTimeout(() => { flipping = false; }, 550);
   }
 
@@ -519,9 +525,6 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
     } else {
       saveCardAnswer(id, correct);
     }
-
-    // Collapse filters after first answer (#9)
-    collapseFilters();
 
     // Exit animation
     const dir = correct ? 1 : -1;
@@ -559,7 +562,6 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
     cardContainer.style.display = 'none';
     swipeHint.style.display = 'none';
     endEl.classList.remove('hidden');
-    expandFilters();
 
     const total = goodList.length + badList.length;
     const pct = total ? Math.round(goodList.length / total * 100) : 0;
@@ -841,4 +843,172 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
 
   initDeck(getActiveCards());
   refreshIcons();
+
+  // ══════════════════════════════════════
+  // Impression recto-verso
+  // ══════════════════════════════════════
+
+  function printCards(cards, cats) {
+    if (cards.length === 0) return;
+
+    const COLS = 2;
+    const ROWS = 4;
+    const PER_PAGE = COLS * ROWS;
+    const catMap = {};
+    for (const c of cats) catMap[c.id] = c.label;
+
+    const pages = [];
+    for (let i = 0; i < cards.length; i += PER_PAGE) {
+      pages.push(cards.slice(i, i + PER_PAGE));
+    }
+
+    let html = '';
+    for (const page of pages) {
+      // Recto (questions)
+      html += '<div class="page"><div class="grid">';
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const card = page[r * COLS + c];
+          html += card
+            ? `<div class="card front">
+                <div class="card-cat">${catMap[card.cat] || ''}</div>
+                <div class="card-body">${card.q}</div>
+              </div>`
+            : '<div class="card empty"></div>';
+        }
+      }
+      html += '</div></div>';
+
+      // Verso (réponses, miroir horizontal)
+      html += '<div class="page"><div class="grid">';
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = COLS - 1; c >= 0; c--) {
+          const card = page[r * COLS + c];
+          html += card
+            ? `<div class="card back">
+                <div class="card-cat">${catMap[card.cat] || ''}</div>
+                <div class="card-body">${card.a}</div>
+              </div>`
+            : '<div class="card empty"></div>';
+        }
+      }
+      html += '</div></div>';
+    }
+
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Flashcards — Impression</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 8mm 12mm;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Quicksand', system-ui, sans-serif;
+    color: #1e293b;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 186mm;
+    height: 265mm;
+    page-break-after: always;
+    padding: 0;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  .grid {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(${COLS}, 1fr);
+    grid-template-rows: repeat(${ROWS}, 1fr);
+    gap: 3mm;
+  }
+
+  .card {
+    border: 0.5pt dashed #94a3b8;
+    border-radius: 2mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3mm;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .card.front { background: #f8fafc; }
+  .card.back { background: #f0f9ff; }
+  .card.empty { border: none; background: none; }
+
+  .card-cat {
+    position: absolute;
+    top: 2mm;
+    left: 3mm;
+    font-size: 5.5pt;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .card-body {
+    font-size: 7.5pt;
+    line-height: 1.3;
+    overflow: hidden;
+  }
+  .card.front .card-body { font-weight: 600; }
+  .card.back .card-body strong { color: #0369a1; }
+
+  .scissors {
+    text-align: center;
+    font-size: 7pt;
+    color: #94a3b8;
+    margin: 2mm 0;
+    letter-spacing: 2px;
+  }
+
+  .info {
+    text-align: center;
+    padding: 16px;
+    color: #64748b;
+    font-size: 10pt;
+    line-height: 1.6;
+  }
+  .info strong { color: #0ea5e9; }
+
+  @media print {
+    .info { display: none; }
+  }
+
+  @media screen {
+    body { background: #e2e8f0; padding: 20px; }
+    .page {
+      background: white;
+      margin: 0 auto 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      border-radius: 4px;
+      padding: 8mm;
+    }
+    .info { margin-bottom: 20px; }
+  }
+</style>
+</head>
+<body>
+  <div class="info">
+    <strong>${cards.length}</strong> flashcards · ${pages.length * 2} pages<br>
+    Imprimer en <strong>recto-verso bord long</strong> · Découper le long des pointillés ✂
+  </div>
+  ${html}
+  <script>window.onafterprint = () => window.close();<\/script>
+</body>
+</html>`);
+    printWindow.document.close();
+    printWindow.onload = () => printWindow.print();
+  }
 }

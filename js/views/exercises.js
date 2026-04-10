@@ -1,6 +1,7 @@
 import { getChapterData } from '../data.js';
 import { getPrefs } from '../store.js';
 import { el, onCleanup } from '../render.js';
+import { icon } from '../icons.js';
 import { renderMarkdown } from '../utils/markdown.js';
 import { createTimer } from '../services/timer.js';
 
@@ -11,7 +12,7 @@ function createRevealable(label, content) {
   contentEl.appendChild(textEl);
 
   const btn = el('button', { class: 'exercise-reveal-btn' },
-    el('span', { class: 'arrow' }, '▸'),
+    el('span', { class: 'arrow' }, icon('chevron-right', 14)),
     el('span', {}, label)
   );
   btn.addEventListener('click', () => {
@@ -25,7 +26,7 @@ export async function renderExercisesTab(container, subjectId, chapterId) {
   const data = await getChapterData(subjectId, chapterId, 'exercises');
   if (!data) {
     container.appendChild(el('div', { class: 'placeholder' },
-      el('div', { class: 'icon' }, '✏️'),
+      el('div', { class: 'icon' }, icon('pencil', 32)),
       el('p', {}, 'Exercices non disponibles.')
     ));
     return;
@@ -40,7 +41,7 @@ export async function renderExercisesTab(container, subjectId, chapterId) {
     // Header with optional timer
     const typeLabels = { composition: 'Composition', croquis: 'Croquis', etude: 'Étude de doc' };
     const headerLeft = el('span', { class: 'exercise-type' }, typeLabels[exo.type] || exo.type);
-    const headerRight = el('span', { class: 'exercise-duration' }, `⏱ ${exo.duration} min`);
+    const headerRight = el('span', { class: 'exercise-duration' }, icon('clock', 14), ` ${exo.duration} min`);
     card.appendChild(el('div', { class: 'exercise-header' }, headerLeft, headerRight));
 
     // Title + subject
@@ -50,9 +51,9 @@ export async function renderExercisesTab(container, subjectId, chapterId) {
     // Timer (if enabled in prefs)
     if (prefs.timer && exo.duration) {
       const timerDisplay = el('span', { class: 'timer-display' }, `${String(exo.duration).padStart(2, '0')}:00`);
-      const btnStart = el('button', { class: 'timer-btn start' }, '▶ Lancer');
-      const btnStop = el('button', { class: 'timer-btn stop', style: 'display:none' }, '⏹ Arrêter');
-      const btnResetTimer = el('button', { class: 'timer-btn reset', style: 'display:none' }, '↺');
+      const btnStart = el('button', { class: 'timer-btn start' }, icon('play', 14), ' Lancer');
+      const btnStop = el('button', { class: 'timer-btn stop', style: 'display:none' }, icon('square', 14), ' Arrêter');
+      const btnResetTimer = el('button', { class: 'timer-btn reset', style: 'display:none' }, icon('rotate-ccw', 14));
 
       const timer = createTimer(exo.duration,
         (formatted, urgent) => {

@@ -50,7 +50,7 @@ html { scroll-behavior: smooth; }
 
 /* ── Fade-in ── */
 #app.fade-in {
-  animation: view-fade-in 0.3s ease-out;
+  animation: view-fade-in 0.3s ease-out forwards;
 }
 @keyframes view-fade-in {
   from { opacity: 0; transform: translateY(6px); }
@@ -161,11 +161,6 @@ html { scroll-behavior: smooth; }
     border-color: var(--accent);
     color: var(--accent);
   }
-
-  /* Focus exit */
-  .fc-focus-exit:hover { border-color: var(--accent); color: var(--accent); }
-
-  /* Skip button */
 
   /* Bottom nav */
   .bottom-nav-btn:hover:not(.active) { color: var(--text-secondary); }

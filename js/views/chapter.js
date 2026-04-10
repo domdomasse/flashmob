@@ -1,5 +1,5 @@
 import { getSubject } from '../data.js';
-import { el, showToast, getCleanupMark, runCleanupsFrom } from '../render.js';
+import { el, showToast, getCleanupMark, runCleanupsFrom, onCleanup } from '../render.js';
 import { navigate } from '../router.js';
 import { icon, refreshIcons } from '../icons.js';
 import { renderFlashcardsTab } from './flashcards.js';
@@ -84,12 +84,17 @@ export async function renderChapter(container, { subject: subjectId, chapter: ch
   const view = el('div', { class: 'view has-bottom-nav' });
   view.append(topbar, tabBar, filterSlot, content);
   container.appendChild(view);
-  container.appendChild(bottomNav);
+  // Bottom nav hors de #app pour ne pas être affecté par le fade-in
+  document.body.appendChild(bottomNav);
+  onCleanup(() => bottomNav.remove());
 
   // ── Switch tab without full page reload ──
   async function switchTab(newTab) {
     if (newTab === activeTab) return;
     activeTab = newTab;
+
+    // Scroll en haut AVANT de changer le contenu
+    window.scrollTo(0, 0);
 
     // Run tab-level cleanups (scroll listeners, timers, keyboard, etc.)
     runCleanupsFrom(tabCleanupMark);
@@ -116,14 +121,13 @@ export async function renderChapter(container, { subject: subjectId, chapter: ch
     } else {
       content.appendChild(
         el('div', { class: 'placeholder' },
-          el('div', { class: 'icon' }, '📄'),
+          el('div', { class: 'icon' }, icon('file-text', 32)),
           el('p', {}, 'Contenu non disponible.')
         )
       );
     }
     tabCleanupMark = getCleanupMark();
     refreshIcons();
-    window.scrollTo(0, 0);
   }
 
   // ── Render initial tab ──
@@ -133,7 +137,7 @@ export async function renderChapter(container, { subject: subjectId, chapter: ch
   } else {
     content.appendChild(
       el('div', { class: 'placeholder' },
-        el('div', { class: 'icon' }, '📄'),
+        el('div', { class: 'icon' }, icon('file-text', 32)),
         el('p', {}, 'Contenu non disponible.')
       )
     );

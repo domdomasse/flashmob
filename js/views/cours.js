@@ -1,5 +1,6 @@
 import { getChapterData } from '../data.js';
 import { el } from '../render.js';
+import { icon } from '../icons.js';
 import { renderMarkdown } from '../utils/markdown.js';
 import { loadGlossary, attachGlossaryTooltips } from '../services/glossary-tooltips.js';
 import { buildToc, slugify, buildBackToTop, activateScrollIndicator } from '../services/toc.js';
@@ -8,7 +9,7 @@ export async function renderCoursTab(container, subjectId, chapterId) {
   const data = await getChapterData(subjectId, chapterId, 'cours');
   if (!data) {
     container.appendChild(el('div', { class: 'placeholder' },
-      el('div', { class: 'icon' }, '📖'),
+      el('div', { class: 'icon' }, icon('book-open', 32)),
       el('p', {}, 'Cours non disponible.')
     ));
     return;
