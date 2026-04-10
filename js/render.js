@@ -32,6 +32,9 @@ export async function renderView(viewFn, params) {
   }
   refreshIcons();
   window.scrollTo(0, 0);
+  app.classList.remove('fade-in');
+  void app.offsetWidth;
+  app.classList.add('fade-in');
 }
 
 export function el(tag, attrs = {}, ...children) {

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flashmob Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Unbounded:wght@700;800&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.155/pdf.min.js"></script>
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <h1>Flashmob <span class="badge">Admin</span></h1>
+      <p class="subtitle">Génère un chapitre complet à partir de photos de cours</p>
+    </header>
+
+    <!-- Étape 1 : Clé API -->
+    <section class="card" id="step-key">
+      <h2><span class="num">1</span> Clé API Claude</h2>
+      <div class="field">
+        <input type="password" id="api-key" placeholder="sk-ant-api03-..." autocomplete="off">
+        <button class="btn-eye" id="toggle-key" title="Afficher/masquer">👁</button>
+      </div>
+      <p class="hint">Reste en local, jamais envoyée ailleurs que l'API Anthropic.</p>
+    </section>
+
+    <!-- Étape 2 : Upload -->
+    <section class="card" id="step-upload">
+      <h2><span class="num">2</span> Photos du cours</h2>
+      <div class="dropzone" id="dropzone">
+        <p class="drop-label">Glisse tes photos ou PDF ici</p>
+        <p class="drop-sub">ou clique pour sélectionner (images + PDF)</p>
+        <input type="file" id="file-input" multiple accept="image/*,.pdf" hidden>
+      </div>
+      <div class="thumbs" id="thumbs"></div>
+      <div class="upload-actions hidden" id="upload-actions">
+        <button class="btn-primary" id="btn-analyze">Analyser les documents</button>
+        <button class="btn-clear" id="clear-images">Tout retirer</button>
+      </div>
+      <div class="analyze-status hidden" id="analyze-status">Analyse en cours...</div>
+    </section>
+
+    <!-- Étape 3 : Config -->
+    <section class="card" id="step-config">
+      <h2><span class="num">3</span> Configuration <span class="auto-badge hidden" id="auto-badge">rempli automatiquement</span></h2>
+
+      <label for="subject-select">Matière</label>
+      <div class="row">
+        <select id="subject-select">
+          <option value="">— Nouvelle matière —</option>
+        </select>
+      </div>
+      <div id="new-subject-fields" class="sub-fields">
+        <label for="subject-id">ID matière</label>
+        <input id="subject-id" placeholder="geo, hist, maths...">
+        <label for="subject-name">Nom</label>
+        <input id="subject-name" placeholder="Géographie">
+        <label for="subject-icon">Icône Lucide</label>
+        <input id="subject-icon" value="book" placeholder="globe, landmark...">
+        <label for="subject-color">Couleur</label>
+        <input id="subject-color" value="#38bdf8" type="color">
+      </div>
+
+      <hr>
+
+      <label for="chapter-name">Nom du chapitre</label>
+      <input id="chapter-name" placeholder="La Chine : recompositions spatiales">
+
+      <label for="chapter-id">ID chapitre</label>
+      <input id="chapter-id" placeholder="chine (auto-généré)">
+
+      <label for="chapter-icon">Icône Lucide</label>
+      <input id="chapter-icon" value="file-text" placeholder="map, landmark...">
+    </section>
+
+    <!-- Étape 4 : Génération -->
+    <section class="card" id="step-generate">
+      <h2><span class="num">4</span> Génération</h2>
+      <button class="btn-primary" id="btn-generate">Générer le chapitre</button>
+
+      <div class="progress hidden" id="progress">
+        <div class="progress-item" data-step="cours">
+          <span class="dot"></span> Extraction du cours
+        </div>
+        <div class="progress-item" data-step="summary">
+          <span class="dot"></span> Résumé
+        </div>
+        <div class="progress-item" data-step="cards">
+          <span class="dot"></span> Flashcards
+        </div>
+        <div class="progress-item" data-step="glossary">
+          <span class="dot"></span> Glossaire
+        </div>
+        <div class="progress-item" data-step="exercises">
+          <span class="dot"></span> Exercices
+        </div>
+      </div>
+
+      <div class="error hidden" id="error"></div>
+    </section>
+
+    <!-- Étape 5 : Résultat -->
+    <section class="card hidden" id="step-result">
+      <h2><span class="num">5</span> Résultat</h2>
+      <div class="stats" id="stats"></div>
+      <div class="preview-tabs" id="preview-tabs"></div>
+      <pre class="preview-code" id="preview-code"></pre>
+      <button class="btn-primary" id="btn-save">Sauvegarder dans le projet</button>
+      <div class="save-result hidden" id="save-result"></div>
+    </section>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -48,59 +48,12 @@ html { scroll-behavior: smooth; }
   flex-shrink: 0;
 }
 
-/* ── Splash screen ── */
-.splash {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  min-height: 100dvh;
-  gap: 24px;
+/* ── Fade-in ── */
+#app.fade-in {
+  animation: view-fade-in 0.3s ease-out;
 }
-.splash-logo {
-  position: relative;
-  width: 96px;
-  height: 96px;
-}
-.splash-circle {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-.splash-circle circle {
-  stroke-dasharray: 276;
-  stroke-dashoffset: 276;
-  animation: splash-draw 1s ease-out forwards;
-}
-.splash-bolt {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 40px;
-  height: 40px;
-  transform: translate(-50%, -50%) scale(0);
-  opacity: 0;
-  animation: splash-bolt-in 0.4s ease-out 0.7s forwards;
-}
-.splash-title {
-  font-family: 'Unbounded', system-ui, sans-serif;
-  font-weight: 800;
-  font-size: 1.5rem;
-  color: var(--text, #e2e8f0);
-  letter-spacing: -0.5px;
-  opacity: 0;
-  transform: translateY(8px);
-  animation: splash-fade-in 0.4s ease-out 0.9s forwards;
-}
-@keyframes splash-draw {
-  to { stroke-dashoffset: 0; }
-}
-@keyframes splash-bolt-in {
-  to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-}
-@keyframes splash-fade-in {
+@keyframes view-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
