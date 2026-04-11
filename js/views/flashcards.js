@@ -659,6 +659,10 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
   // Card follows pointer freely, action determined on release
   // ══════════════════════════════════════
 
+  // Safety net: prevent ALL native touch gestures on the card area
+  // (back navigation, address bar, scroll) even if CSS touch-action fails
+  cardEl.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+
   let dragging = false, startX = 0, startY = 0, hasMoved = false;
   const DRAG_THRESHOLD = 10;   // px before a tap becomes a drag
   const SWIPE_H = 80;          // px horizontal to trigger answer

@@ -657,7 +657,7 @@
   border: 1px dashed var(--border);
 }
 .fc-deck-area {
-  touch-action: pan-y;
+  touch-action: none;
 }
 .fc-deck-area.hidden { display: none; }
 .fc-cardlist.hidden { display: none; }
