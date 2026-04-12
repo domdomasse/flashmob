@@ -81,6 +81,10 @@ export function buildToc(container, sections, prefix = '') {
  * Create a floating "back to top" button that appears on scroll.
  */
 export function buildBackToTop() {
+  // Remove any existing back-to-top button first (prevents accumulation on tab switch)
+  const old = document.querySelector('.back-to-top');
+  if (old) old.remove();
+
   const btn = el('button', {
     class: 'back-to-top',
     'aria-label': 'Retour en haut',

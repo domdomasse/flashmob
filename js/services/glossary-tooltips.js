@@ -46,8 +46,9 @@ export function attachGlossaryTooltips(container, glossary) {
     processTextNodes(textEl, regex, glossary);
   }
 
-  // Add tooltip dismiss on click outside
+  // Add tooltip dismiss on click outside or scroll
   document.addEventListener('click', dismissTooltip);
+  window.addEventListener('scroll', dismissTooltip, { passive: true });
 }
 
 function processTextNodes(element, regex, glossary) {
