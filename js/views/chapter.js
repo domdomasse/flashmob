@@ -88,32 +88,7 @@ export async function renderChapter(container, { subject: subjectId, chapter: ch
   container.appendChild(view);
   // Bottom nav hors de #app pour ne pas être affecté par le fade-in
   document.body.appendChild(bottomNav);
-
-  // Firefox Android dynamic toolbar fix.
-  // position:fixed;bottom:0 is relative to the layout viewport, which Firefox
-  // updates with a delay during toolbar transitions. We keep position:fixed
-  // (flicker-free) and apply a translateY correction based on the visual viewport.
-  function syncBottomNav() {
-    if (!window.visualViewport) return;
-    const vv = window.visualViewport;
-    // How far the visual viewport bottom differs from the layout viewport bottom
-    const correction = (vv.offsetTop + vv.height) - window.innerHeight;
-    bottomNav.style.transform = Math.abs(correction) > 1 ? `translateY(${correction}px)` : '';
-  }
-
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', syncBottomNav);
-    window.visualViewport.addEventListener('scroll', syncBottomNav);
-  }
-
-  onCleanup(() => {
-    bottomNav.remove();
-    bottomNav.style.transform = '';
-    if (window.visualViewport) {
-      window.visualViewport.removeEventListener('resize', syncBottomNav);
-      window.visualViewport.removeEventListener('scroll', syncBottomNav);
-    }
-  });
+  onCleanup(() => bottomNav.remove());
 
   // Mark AFTER page-level cleanups (bottomNav) so tab switches don't remove them
   let tabCleanupMark = getCleanupMark();
@@ -162,7 +137,6 @@ export async function renderChapter(container, { subject: subjectId, chapter: ch
     tabCleanupMark = getCleanupMark();
     refreshIcons();
     window.scrollTo(0, 0);
-    syncBottomNav();
   }
 
   // ── Render initial tab ──
