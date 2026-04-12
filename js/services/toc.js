@@ -15,6 +15,28 @@ export function slugify(text) {
  * - Sections without subsections: click scrolls to section
  * - Sub-items: click scrolls to sub-section
  */
+/** Uncollapse any collapsed section-toggle ancestor of the target, then scroll to it */
+function scrollToSection(target) {
+  if (!target) return;
+  // Uncollapse the direct parent toggle (subsection inside a section body)
+  const subToggle = target.closest('.section-body')?.previousElementSibling;
+  if (subToggle?.classList.contains('section-toggle', 'collapsed')) {
+    subToggle.classList.remove('collapsed');
+  }
+  // Uncollapse the section-level toggle
+  const sectionCard = target.closest('.summary-section');
+  if (sectionCard) {
+    const sectionToggle = sectionCard.querySelector(':scope > .section-toggle');
+    if (sectionToggle?.classList.contains('collapsed')) {
+      sectionToggle.classList.remove('collapsed');
+    }
+  }
+  // Scroll after DOM update
+  requestAnimationFrame(() => {
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
 export function buildToc(container, sections, prefix = '') {
   const tocList = el('div', { class: 'cours-toc-list' });
 
@@ -37,8 +59,7 @@ export function buildToc(container, sections, prefix = '') {
           class: 'cours-toc-sub',
           onClick: (e) => {
             e.stopPropagation();
-            const target = container.querySelector(`#${subSlug}`);
-            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            scrollToSection(container.querySelector(`#${subSlug}`));
           }
         }, sub.title));
       }
@@ -53,8 +74,7 @@ export function buildToc(container, sections, prefix = '') {
     } else {
       // No subsections: click scrolls to section
       sectionRow.addEventListener('click', () => {
-        const target = container.querySelector(`#${sectionSlug}`);
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        scrollToSection(container.querySelector(`#${sectionSlug}`));
       });
     }
 

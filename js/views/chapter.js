@@ -89,26 +89,20 @@ export async function renderChapter(container, { subject: subjectId, chapter: ch
   // Bottom nav hors de #app pour ne pas être affecté par le fade-in
   document.body.appendChild(bottomNav);
 
-  // Visual Viewport API: reposition bottom nav for Firefox Android bottom toolbar
-  function syncBottomNav() {
-    if (!window.visualViewport) return;
-    const vv = window.visualViewport;
-    const offset = window.innerHeight - (vv.height + vv.offsetTop);
-    bottomNav.style.bottom = offset > 0 ? offset + 'px' : '0';
+  // Force repaint on viewport resize (Firefox Android dynamic toolbar)
+  // Don't reposition — just nudge the browser to recalculate fixed elements
+  function onViewportResize() {
+    void bottomNav.offsetHeight;
   }
   if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', syncBottomNav);
-    window.visualViewport.addEventListener('scroll', syncBottomNav);
-    syncBottomNav();
+    window.visualViewport.addEventListener('resize', onViewportResize);
   }
 
   onCleanup(() => {
     bottomNav.remove();
     if (window.visualViewport) {
-      window.visualViewport.removeEventListener('resize', syncBottomNav);
-      window.visualViewport.removeEventListener('scroll', syncBottomNav);
+      window.visualViewport.removeEventListener('resize', onViewportResize);
     }
-    bottomNav.style.bottom = '';
   });
 
   // Mark AFTER page-level cleanups (bottomNav) so tab switches don't remove them

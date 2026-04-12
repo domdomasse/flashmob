@@ -52,6 +52,12 @@
   padding-bottom: 0;
 }
 
+/* Offset scroll target to account for sticky topbar */
+.summary-section-title[id],
+.summary-subsection-title[id] {
+  scroll-margin-top: 88px;
+}
+
 .summary-section-title {
   font-size: 1.1rem;
   font-weight: 700;
@@ -76,7 +82,7 @@
   font-size: 0.95rem;
   font-weight: 700;
   color: var(--text);
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 }
 .summary-text {
   font-size: 0.92rem;
