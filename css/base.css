@@ -27,7 +27,6 @@ body {
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
   overscroll-behavior: none;
-  overflow-x: hidden;
 }
 
 a { color: var(--accent); text-decoration: none; }
