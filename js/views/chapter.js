@@ -89,19 +89,30 @@ export async function renderChapter(container, { subject: subjectId, chapter: ch
   // Bottom nav hors de #app pour ne pas être affecté par le fade-in
   document.body.appendChild(bottomNav);
 
-  // Force repaint on viewport resize (Firefox Android dynamic toolbar)
-  // Don't reposition — just nudge the browser to recalculate fixed elements
-  function onViewportResize() {
-    void bottomNav.offsetHeight;
+  // Visual Viewport positioning for Firefox Android dynamic toolbar.
+  // Uses top-based positioning from the visual viewport (always accurate)
+  // instead of bottom-based (depends on layout viewport which can lag).
+  function syncBottomNav() {
+    if (!window.visualViewport) return;
+    const vv = window.visualViewport;
+    bottomNav.style.bottom = 'auto';
+    bottomNav.style.top = (vv.offsetTop + vv.height - bottomNav.offsetHeight) + 'px';
   }
   if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', onViewportResize);
+    window.visualViewport.addEventListener('resize', syncBottomNav);
+    window.visualViewport.addEventListener('scroll', syncBottomNav);
+    window.addEventListener('scroll', syncBottomNav, { passive: true });
+    syncBottomNav();
   }
 
   onCleanup(() => {
     bottomNav.remove();
+    bottomNav.style.top = '';
+    bottomNav.style.bottom = '';
     if (window.visualViewport) {
-      window.visualViewport.removeEventListener('resize', onViewportResize);
+      window.visualViewport.removeEventListener('resize', syncBottomNav);
+      window.visualViewport.removeEventListener('scroll', syncBottomNav);
+      window.removeEventListener('scroll', syncBottomNav);
     }
   });
 
