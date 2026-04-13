@@ -15,7 +15,7 @@ Le site a besoin d'un serveur HTTP local pour fonctionner (les modules JS et le 
 Si le script ne fonctionne pas, ouvrir un terminal dans le dossier du projet et lancer :
 
 ```bash
-python3 -m http.server 8000
+python3 -m http.server 8080
 ```
 Le script lance un serveur sur `http://localhost:8080` et ouvre le navigateur. Pour arreter : `Ctrl+C` dans le terminal.
 
