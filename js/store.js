@@ -7,7 +7,8 @@ const DEFAULTS = {
     theme: 'dark',
     fontSize: 1,
     spacedRepetition: false,
-    timer: false
+    timer: false,
+    shakeToShuffle: false
   },
   cards: {},
   chapters: {}

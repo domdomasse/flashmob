@@ -37,6 +37,7 @@ const PRECACHE = [
   './js/services/glossary-tooltips.js',
   './js/services/toc.js',
   './js/services/export-pdf.js',
+  './js/services/shake.js',
   './data/index.json'
 ];
 

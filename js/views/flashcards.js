@@ -5,6 +5,7 @@ import { icon, refreshIcons } from '../icons.js';
 import { getNextReview, sortBySpacedRepetition } from '../services/spaced.js';
 import { printCards } from './flashcards-print.js';
 import { setupDrag } from './flashcards-drag.js';
+import { startShakeDetection, stopShakeDetection } from '../services/shake.js';
 
 export async function renderFlashcardsTab(container, subjectId, chapterId, { filterSlot } = {}) {
   const data = await getChapterData(subjectId, chapterId, 'cards');
@@ -683,6 +684,7 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
   onCleanup(() => {
     abortCtrl.abort();
     clearTimeout(hintTimer);
+    stopShakeDetection();
     document.getElementById('app').classList.remove('fc-focus');
   });
 
@@ -706,5 +708,13 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
 
   initDeck(getActiveCards());
   refreshIcons();
+
+  // Shake to shuffle — if enabled in prefs
+  if (prefs.shakeToShuffle) {
+    startShakeDetection(() => {
+      if (animating || listMode) return;
+      initDeck(getFiltered());
+    });
+  }
 
 }

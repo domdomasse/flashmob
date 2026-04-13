@@ -2,6 +2,7 @@ import { getPrefs, setPref, exportData, importData, resetAll } from '../store.js
 import { el } from '../render.js';
 import { navigate } from '../router.js';
 import { icon } from '../icons.js';
+import { isShakeAvailable, requestShakePermission } from '../services/shake.js';
 
 const FONT_SIZES = [
   { value: 0.85, label: 'Petit' },
@@ -76,9 +77,30 @@ export async function renderSettings(container) {
     (checked) => setPref('timer', checked)
   );
 
+  // Shake to shuffle — only show on devices with accelerometer
+  let shakeToggle = null;
+  if (isShakeAvailable()) {
+    shakeToggle = createToggle('Secouer pour mélanger',
+      'Secouer le téléphone pour mélanger les flashcards',
+      prefs.shakeToShuffle,
+      async (checked) => {
+        if (checked) {
+          const granted = await requestShakePermission();
+          if (!granted) {
+            // Permission denied — uncheck and notify
+            shakeToggle.querySelector('input').checked = false;
+            alert("L'accès au capteur de mouvement a été refusé. Active-le dans les réglages de ton navigateur.");
+            return;
+          }
+        }
+        setPref('shakeToShuffle', checked);
+      }
+    );
+  }
+
   const features = el('div', { class: 'section', style: 'margin-top: 24px' },
     el('div', { class: 'section-title' }, 'Fonctionnalités'),
-    spacedToggle, timerToggle
+    spacedToggle, timerToggle, ...(shakeToggle ? [shakeToggle] : [])
   );
 
   // ── Data management ──
