@@ -2,20 +2,9 @@
 
 Plateforme de revision pour lyceens. SPA vanilla JS, mobile-first.
 
-## Navigation
-
-La navigation entre les onglets (Cours, Resume, Flashcards, Glossaire, Exercices) se fait via une barre d'onglets en haut de page, sous le titre du chapitre. Le header complet (titre + onglets) reste colle en haut lors du scroll.
-
-La barre s'adapte a la taille de l'ecran :
-- **Desktop (>= 600px)** : icone + label complet (Flashcards, Glossaire, Exercices)
-- **Tablette/mobile (420-599px)** : icone + label court (Flash., Gloss., Exos)
-- **Petit ecran (< 420px)** : icones seules
-
 ## Lancer le site en local
 
 Le site a besoin d'un serveur HTTP local pour fonctionner (les modules JS et le chargement des donnees ne marchent pas en ouvrant directement le fichier HTML).
-
-### Lancement rapide (script)
 
 | Systeme | Fichier | Action |
 |---------|---------|--------|
@@ -25,7 +14,19 @@ Le site a besoin d'un serveur HTTP local pour fonctionner (les modules JS et le 
 
 Le script lance un serveur sur `http://localhost:8080` et ouvre le navigateur. Pour arreter : `Ctrl+C` dans le terminal.
 
-### Lancement manuel
+## Panneau admin
+
+L'outil admin permet de generer de nouveaux chapitres a partir de photos ou PDF de cours. Il necessite une cle API Claude.
+
+| Systeme | Fichier | Action |
+|---------|---------|--------|
+| **Linux** | `admin/start.sh` | Double-clic ou `./admin/start.sh` dans le terminal |
+| **macOS** | `admin/start.command` | Double-clic (ouvre Terminal automatiquement) |
+| **Windows** | `admin/start.bat` | Double-clic |
+
+Le panneau admin se lance sur `http://localhost:8000`.
+
+## Lancement manuel
 
 Si les scripts ne fonctionnent pas, ouvrir un terminal dans le dossier du projet et lancer :
 
@@ -36,45 +37,3 @@ python3 -m http.server 8080
 Puis ouvrir `http://localhost:8080` dans le navigateur.
 
 > **Note :** Python 3 est requis. Il est pre-installe sur macOS et la plupart des distributions Linux. Sur Windows, installer depuis [python.org](https://www.python.org/downloads/).
-
-### macOS — instructions detaillees
-
-1. Ouvrir **Terminal** (Applications > Utilitaires > Terminal)
-2. Naviguer vers le dossier du projet :
-   ```bash
-   cd /chemin/vers/flashmob
-   ```
-3. Lancer le serveur :
-   ```bash
-   python3 -m http.server 8080
-   ```
-4. Ouvrir Safari ou Chrome a l'adresse `http://localhost:8080`
-5. Pour arreter le serveur : `Ctrl+C` dans le terminal
-
-## Panneau admin
-
-L'outil admin permet de generer de nouveaux chapitres a partir de photos ou PDF de cours. Il necessite une cle API Claude.
-
-### Lancement rapide (script)
-
-| Systeme | Fichier | Action |
-|---------|---------|--------|
-| **Linux** | `admin/start.sh` | Double-clic ou `./admin/start.sh` dans le terminal |
-| **macOS** | `admin/start.command` | Double-clic (ouvre Terminal automatiquement) |
-| **Windows** | `admin/start.bat` | Double-clic |
-
-Le panneau admin se lance sur `http://localhost:8000`.
-
-### macOS — lancement manuel
-
-1. Ouvrir **Terminal** (Applications > Utilitaires > Terminal)
-2. Naviguer vers le dossier admin :
-   ```bash
-   cd /chemin/vers/flashmob/admin
-   ```
-3. Lancer le serveur :
-   ```bash
-   python3 -m http.server 8000
-   ```
-4. Ouvrir Safari ou Chrome a l'adresse `http://localhost:8000`
-5. Pour arreter le serveur : `Ctrl+C` dans le terminal
