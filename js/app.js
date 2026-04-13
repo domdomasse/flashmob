@@ -1,6 +1,6 @@
 import { initRouter } from './router.js';
 import { getPrefs } from './store.js';
-import { renderView } from './render.js';
+import { renderView, showToast } from './render.js';
 import { renderHome } from './views/home.js';
 import { renderSubject } from './views/subject.js';
 import { renderChapter } from './views/chapter.js';
@@ -35,3 +35,46 @@ function onNavigate(route) {
 
 applyPrefs();
 initRouter(onNavigate);
+
+// ── Offline/online indicator ──
+window.addEventListener('offline', () => showToast('Mode hors-ligne'));
+window.addEventListener('online', () => showToast('Connexion rétablie'));
+
+// ── PWA install prompt ──
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  showInstallBanner();
+});
+
+function showInstallBanner() {
+  // Don't show if already installed or dismissed this session
+  if (window.matchMedia('(display-mode: standalone)').matches) return;
+  if (sessionStorage.getItem('pwa-dismissed')) return;
+
+  const banner = document.createElement('div');
+  banner.className = 'pwa-banner';
+  banner.innerHTML = `
+    <span class="pwa-banner-text">Installer Flashmob</span>
+    <button class="pwa-banner-install">Installer</button>
+    <button class="pwa-banner-close" aria-label="Fermer">&times;</button>
+  `;
+
+  banner.querySelector('.pwa-banner-install').addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') showToast('Flashmob installé !');
+    deferredPrompt = null;
+    banner.remove();
+  });
+
+  banner.querySelector('.pwa-banner-close').addEventListener('click', () => {
+    sessionStorage.setItem('pwa-dismissed', '1');
+    banner.remove();
+  });
+
+  document.body.appendChild(banner);
+}

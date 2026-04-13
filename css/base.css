@@ -29,6 +29,16 @@ body {
 }
 
 a { color: var(--accent); text-decoration: none; }
+
+/* ── Focus visible (keyboard navigation) ── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
 img { max-width: 100%; height: auto; display: block; }
 button { font-family: inherit; font-size: inherit; }
 
@@ -81,6 +91,61 @@ html { scroll-behavior: smooth; }
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+/* ── PWA install banner ── */
+.pwa-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--surface);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  z-index: 9998;
+  animation: pwa-slide-up 0.3s ease;
+}
+@keyframes pwa-slide-up {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+.pwa-banner-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+.pwa-banner-install {
+  padding: 6px 14px;
+  background: var(--accent);
+  color: var(--on-accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  white-space: nowrap;
+}
+.pwa-banner-install:active { opacity: 0.7; }
+.pwa-banner-close {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.pwa-banner-close:active { opacity: 0.7; }
 
 /* ── Hover & tap feedback ── */
 @media (hover: hover) {

@@ -1,5 +1,5 @@
 import { getSubject } from '../data.js';
-import { el, showToast, getCleanupMark, runCleanupsFrom } from '../render.js';
+import { el, showToast, getCleanupMark, runCleanupsFrom, onCleanup } from '../render.js';
 import { navigate } from '../router.js';
 import { icon, refreshIcons } from '../icons.js';
 import { renderFlashcardsTab } from './flashcards.js';
@@ -7,6 +7,7 @@ import { renderSummaryTab } from './summary.js';
 import { renderExercisesTab } from './exercises.js';
 import { renderCoursTab } from './cours.js';
 import { renderGlossaryTab } from './glossary-tab.js';
+import { detachGlossaryTooltips } from '../services/glossary-tooltips.js';
 
 const TABS = [
   { id: 'cours', label: 'Cours', short: 'Cours', iconName: 'book-open' },
@@ -80,6 +81,7 @@ export async function renderChapter(container, { subject: subjectId, chapter: ch
   view.append(header, filterSlot, content);
   container.appendChild(view);
 
+  onCleanup(() => detachGlossaryTooltips());
   let tabCleanupMark = getCleanupMark();
 
   // ── Switch tab without full page reload ──
@@ -89,6 +91,7 @@ export async function renderChapter(container, { subject: subjectId, chapter: ch
 
     // Run tab-level cleanups (scroll listeners, timers, keyboard, etc.)
     runCleanupsFrom(tabCleanupMark);
+    detachGlossaryTooltips();
 
     // Update hash silently (no router trigger)
     history.replaceState(null, '', `#${subjectId}/${chapterId}/${newTab}`);
@@ -134,5 +137,6 @@ export async function renderChapter(container, { subject: subjectId, chapter: ch
       )
     );
   }
+  refreshIcons();
 
 }

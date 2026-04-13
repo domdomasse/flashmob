@@ -3,8 +3,6 @@ import { saveCardAnswer, getCardProgress, toggleFavorite, toggleBanned, resetCha
 import { el, onCleanup } from '../render.js';
 import { icon, refreshIcons } from '../icons.js';
 import { getNextReview, sortBySpacedRepetition } from '../services/spaced.js';
-import { printCards } from './flashcards-print.js';
-import { setupDrag } from './flashcards-drag.js';
 
 export async function renderFlashcardsTab(container, subjectId, chapterId, { filterSlot } = {}) {
   const data = await getChapterData(subjectId, chapterId, 'cards');
@@ -168,11 +166,8 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
   stats.addEventListener('scroll', checkStatsOverflow, { passive: true });
   window.addEventListener('resize', checkStatsOverflow, { passive: true });
   // Defer initial check until DOM is ready
-  const statsCheckTimer = setTimeout(checkStatsOverflow, 100);
-  onCleanup(() => {
-    clearTimeout(statsCheckTimer);
-    window.removeEventListener('resize', checkStatsOverflow);
-  });
+  setTimeout(checkStatsOverflow, 100);
+  onCleanup(() => window.removeEventListener('resize', checkStatsOverflow));
 
   const progressBar = el('div', { class: 'fc-progress-wrap' }, progressFill);
 
@@ -186,7 +181,7 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
   sessionListEl.addEventListener('scroll', () => {
     const atBottom = sessionListEl.scrollTop + sessionListEl.clientHeight >= sessionListEl.scrollHeight - 10;
     sessionScrollHint.classList.toggle('hidden', atBottom);
-  }, { passive: true });
+  });
 
   function toggleSessionList(type) {
     if (sessionListType === type) {
@@ -257,7 +252,7 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
 
   function updateFavIcon(isFav) {
     favBtn.innerHTML = '';
-    favBtn.appendChild(icon('star', 18));
+    favBtn.appendChild(icon(isFav ? 'star' : 'star', 18));
     favBtn.classList.toggle('active', isFav);
     refreshIcons();
   }
@@ -665,14 +660,148 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
   }
 
   // ══════════════════════════════════════
-  // Free drag — delegated to flashcards-drag.js
+  // Free drag — Pointer Events (touch + mouse unified)
+  // Card follows pointer freely, action determined on release
   // ══════════════════════════════════════
 
-  setupDrag({
-    cardEl, cardContainer, overlayGood, overlayBad, overlaySkip,
-    flipCard, answerCard, goNext,
-    getState: () => ({ isFlipped, animating, listMode, focusMode }),
-    setLastDragTime: (t) => { lastDragTime = t; }
+  // Safety net: prevent ALL native touch gestures on the card area
+  // (back navigation, address bar, scroll) even if CSS touch-action fails.
+  // preventDefault on touchstart is the earliest and most reliable signal —
+  // the browser MUST honor it before deciding on any gesture.
+  cardEl.addEventListener('touchstart', e => {
+    if (e.target.closest('.fc-fav-btn')) return; // preserve fav button taps
+    e.preventDefault();
+  }, { passive: false });
+  cardEl.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+
+  let dragging = false, startX = 0, startY = 0, hasMoved = false;
+  const DRAG_THRESHOLD = 10;   // px before a tap becomes a drag
+  const SWIPE_H = 80;          // px horizontal to trigger answer
+  const SWIPE_V = 60;          // px vertical to trigger skip
+
+  cardEl.addEventListener('pointerdown', e => {
+    if (animating || listMode) return;
+    // Don't capture interactive elements inside the card
+    if (e.target.closest('.fc-fav-btn')) return;
+    dragging = true;
+    hasMoved = false;
+    startX = e.clientX;
+    startY = e.clientY;
+    cardEl.setPointerCapture(e.pointerId);
+    cardEl.style.transition = 'none';
+  });
+
+  cardEl.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    const ax = Math.abs(dx), ay = Math.abs(dy);
+
+    // Still below tap threshold
+    if (!hasMoved && ax < DRAG_THRESHOLD && ay < DRAG_THRESHOLD) return;
+    if (!hasMoved) {
+      cardContainer.classList.add('dragging');
+      // Lock body scroll during drag to prevent mobile browser chrome changes
+      document.body.style.overflow = 'hidden';
+    }
+    hasMoved = true;
+
+    // Free transform — card follows the pointer
+    const rotation = Math.max(-15, Math.min(15, dx * 0.08));
+    cardEl.style.transform = `translate(${dx}px, ${dy}px) rotate(${rotation}deg)`;
+
+    // Overlays — show feedback based on position and flip state
+    const dominantH = ax > ay && ax > 20;
+    const dominantV = dy > 20 && dy > ax;
+
+    if (isFlipped && dominantH) {
+      const intensity = Math.min(ax / SWIPE_H, 1);
+      overlayGood.style.opacity = dx > 0 ? String(intensity) : '0';
+      overlayBad.style.opacity = dx < 0 ? String(intensity) : '0';
+      overlaySkip.style.opacity = '0';
+    } else if (dominantV) {
+      const intensity = Math.min(dy / SWIPE_V, 1);
+      overlaySkip.style.opacity = String(intensity);
+      overlayGood.style.opacity = '0';
+      overlayBad.style.opacity = '0';
+    } else {
+      overlayGood.style.opacity = '0';
+      overlayBad.style.opacity = '0';
+      overlaySkip.style.opacity = '0';
+    }
+  });
+
+  cardEl.addEventListener('pointerup', e => {
+    if (!dragging) return;
+    dragging = false;
+
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    const ax = Math.abs(dx), ay = Math.abs(dy);
+
+    // Reset overlays + drag layer + unlock body scroll
+    overlayGood.style.opacity = '0';
+    overlayBad.style.opacity = '0';
+    overlaySkip.style.opacity = '0';
+    cardContainer.classList.remove('dragging');
+    document.body.style.overflow = '';
+
+    // ── Tap (no significant movement) → flip ──
+    if (!hasMoved) {
+      cardEl.style.transition = '';
+      cardEl.style.transform = '';
+      flipCard();
+      return;
+    }
+
+    lastDragTime = Date.now();
+
+    // ── Vertical drag down past threshold → skip (recto or verso) ──
+    if (dy > SWIPE_V && dy > ax) {
+      const rotation = Math.max(-15, Math.min(15, dx * 0.08));
+      cardEl.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+      cardEl.style.transform = `translate(${dx}px, ${dy + 120}px) rotate(${rotation}deg)`;
+      cardEl.style.opacity = '0';
+      animating = true;
+      setTimeout(() => enterNextCard(() => {
+        if (currentIdx < deck.length - 1) currentIdx++;
+        else if (currentIdx === deck.length - 1) { currentIdx++; }
+      }), 200);
+      return;
+    }
+
+    // ── Flipped + horizontal drag past threshold → answer ──
+    if (isFlipped && ax > SWIPE_H && ax > ay) {
+      answerCard(dx > 0);
+      return;
+    }
+
+    // ── Not flipped + horizontal drag past threshold → flip card ──
+    if (!isFlipped && ax > SWIPE_H && ax > ay) {
+      cardEl.style.transition = 'transform 0.3s ease';
+      cardEl.style.transform = '';
+      flipCard();
+      return;
+    }
+
+    // ── Below thresholds → snap back ──
+    cardEl.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease';
+    cardEl.style.transform = '';
+    cardEl.style.opacity = '';
+  });
+
+  // Prevent pointer cancel on touch devices
+  cardEl.addEventListener('pointercancel', () => {
+    if (!dragging) return;
+    dragging = false;
+    overlayGood.style.opacity = '0';
+    overlayBad.style.opacity = '0';
+    overlaySkip.style.opacity = '0';
+    cardContainer.classList.remove('dragging');
+    document.body.style.overflow = '';
+    cardEl.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+    cardEl.style.transform = '';
+    cardEl.style.opacity = '';
   });
 
   // ══════════════════════════════════════
@@ -707,4 +836,187 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
   initDeck(getActiveCards());
   refreshIcons();
 
+  // ══════════════════════════════════════
+  // Impression recto-verso
+  // ══════════════════════════════════════
+
+  function printCards(cards, cats) {
+    if (cards.length === 0) return;
+
+    const COLS = 2;
+    const ROWS = 4;
+    const PER_PAGE = COLS * ROWS;
+    const catMap = {};
+    for (const c of cats) catMap[c.id] = c.label;
+
+    const pages = [];
+    for (let i = 0; i < cards.length; i += PER_PAGE) {
+      pages.push(cards.slice(i, i + PER_PAGE));
+    }
+
+    let html = '';
+    for (const page of pages) {
+      // Recto (questions)
+      html += '<div class="page"><div class="grid">';
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const card = page[r * COLS + c];
+          html += card
+            ? `<div class="card front">
+                <div class="card-cat">${catMap[card.cat] || ''}</div>
+                <div class="card-body">${card.q}</div>
+              </div>`
+            : '<div class="card empty"></div>';
+        }
+      }
+      html += '</div></div>';
+
+      // Verso (réponses, miroir horizontal)
+      html += '<div class="page"><div class="grid">';
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = COLS - 1; c >= 0; c--) {
+          const card = page[r * COLS + c];
+          html += card
+            ? `<div class="card back">
+                <div class="card-cat">${catMap[card.cat] || ''}</div>
+                <div class="card-body">${card.a}</div>
+              </div>`
+            : '<div class="card empty"></div>';
+        }
+      }
+      html += '</div></div>';
+    }
+
+    const htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Flashcards — Impression</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 8mm 12mm;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Quicksand', system-ui, sans-serif;
+    color: #1e293b;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 186mm;
+    height: 265mm;
+    page-break-after: always;
+    padding: 0;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  .grid {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(${COLS}, 1fr);
+    grid-template-rows: repeat(${ROWS}, 1fr);
+    gap: 3mm;
+  }
+
+  .card {
+    border: 0.5pt dashed #94a3b8;
+    border-radius: 2mm;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3mm;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .card.front { background: #f8fafc; }
+  .card.back { background: #f0f9ff; }
+  .card.empty { border: none; background: none; }
+
+  .card-cat {
+    position: absolute;
+    top: 2mm;
+    left: 3mm;
+    font-size: 5.5pt;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .card-body {
+    font-size: 7.5pt;
+    line-height: 1.3;
+    overflow: hidden;
+  }
+  .card.front .card-body { font-weight: 600; }
+  .card.back .card-body strong { color: #0369a1; }
+
+  .scissors {
+    text-align: center;
+    font-size: 7pt;
+    color: #94a3b8;
+    margin: 2mm 0;
+    letter-spacing: 2px;
+  }
+
+  .info {
+    text-align: center;
+    padding: 16px;
+    color: #64748b;
+    font-size: 10pt;
+    line-height: 1.6;
+  }
+  .info strong { color: #0ea5e9; }
+  .print-btn {
+    margin-top: 10px;
+    padding: 10px 24px;
+    font-size: 11pt;
+    font-weight: 700;
+    color: white;
+    background: #0ea5e9;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  .print-btn:active { opacity: 0.7; }
+
+  @media print {
+    .info { display: none; }
+  }
+
+  @media screen {
+    body { background: #e2e8f0; padding: 20px; }
+    .page {
+      background: white;
+      margin: 0 auto 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      border-radius: 4px;
+      padding: 8mm;
+    }
+    .info { margin-bottom: 20px; }
+  }
+</style>
+</head>
+<body>
+  <div class="info">
+    <strong>${cards.length}</strong> flashcards · ${pages.length * 2} pages<br>
+    Imprimer en <strong>recto-verso bord long</strong> · Découper le long des pointillés ✂<br>
+    <button onclick="window.print()" class="print-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg> Imprimer</button>
+  </div>
+  ${html}
+  <script>
+    window.onload = function() { setTimeout(function() { window.print(); }, 300); };
+  <\/script>
+</body>
+</html>`;
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+  }
 }

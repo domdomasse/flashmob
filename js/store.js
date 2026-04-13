@@ -1,6 +1,8 @@
 const KEY = 'flashmob';
+const STORE_VERSION = 1;
 
 const DEFAULTS = {
+  version: STORE_VERSION,
   prefs: {
     theme: 'dark',
     fontSize: 1,
@@ -13,23 +15,47 @@ const DEFAULTS = {
 
 let state = null;
 
+/**
+ * Migrate saved data from older versions to the current schema.
+ * Add migration steps here when STORE_VERSION is incremented.
+ */
+function migrate(saved) {
+  const v = saved.version || 0;
+  // v0 → v1: add version field (no data changes needed)
+  if (v < 1) {
+    saved.version = 1;
+  }
+  // Future migrations:
+  // if (v < 2) { ... }
+  return saved;
+}
+
 function load() {
   if (state) return;
   try {
     const raw = localStorage.getItem(KEY);
     const saved = raw ? JSON.parse(raw) : {};
+    const migrated = migrate(saved);
     state = {
-      prefs: { ...DEFAULTS.prefs, ...saved.prefs },
-      cards: saved.cards || {},
-      chapters: saved.chapters || {}
+      version: STORE_VERSION,
+      prefs: { ...DEFAULTS.prefs, ...migrated.prefs },
+      cards: migrated.cards || {},
+      chapters: migrated.chapters || {}
     };
-  } catch {
+    // Persist migration if version changed
+    if (migrated.version !== (saved.version || 0)) save();
+  } catch (e) {
+    console.warn('Flashmob: données localStorage corrompues, reset aux valeurs par défaut.', e);
     state = JSON.parse(JSON.stringify(DEFAULTS));
   }
 }
 
 function save() {
-  localStorage.setItem(KEY, JSON.stringify(state));
+  try {
+    localStorage.setItem(KEY, JSON.stringify(state));
+  } catch (e) {
+    console.warn('Flashmob: impossible de sauvegarder (stockage plein ?).', e);
+  }
 }
 
 // ── Preferences ──
@@ -171,10 +197,12 @@ export function exportData() {
 export function importData(jsonString) {
   try {
     const data = JSON.parse(jsonString);
+    const migrated = migrate(data);
     state = {
-      prefs: { ...DEFAULTS.prefs, ...data.prefs },
-      cards: data.cards || {},
-      chapters: data.chapters || {}
+      version: STORE_VERSION,
+      prefs: { ...DEFAULTS.prefs, ...migrated.prefs },
+      cards: migrated.cards || {},
+      chapters: migrated.chapters || {}
     };
     save();
     return true;

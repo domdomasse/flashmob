@@ -1,5 +1,6 @@
-const CACHE = 'flashmob-v2';
+const CACHE = 'flashmob-v3';
 
+// App shell only — data JSON files are cached dynamically on first access
 const PRECACHE = [
   './',
   './index.html',
@@ -10,6 +11,7 @@ const PRECACHE = [
   './css/flashcards.css',
   './css/content.css',
   './css/themes.css',
+  './css/print.css',
   './js/app.js',
   './js/router.js',
   './js/store.js',
@@ -21,6 +23,8 @@ const PRECACHE = [
   './js/views/subject.js',
   './js/views/chapter.js',
   './js/views/flashcards.js',
+  './js/views/flashcards-print.js',
+  './js/views/flashcards-drag.js',
   './js/views/allcards.js',
   './js/views/cours.js',
   './js/views/summary.js',
@@ -32,12 +36,8 @@ const PRECACHE = [
   './js/services/timer.js',
   './js/services/glossary-tooltips.js',
   './js/services/toc.js',
-  './data/index.json',
-  './data/geo/chine/cards.json',
-  './data/geo/chine/summary.json',
-  './data/geo/chine/exercises.json',
-  './data/geo/chine/cours.json',
-  './data/geo/chine/glossary.json'
+  './js/services/export-pdf.js',
+  './data/index.json'
 ];
 
 // Install: pre-cache all files

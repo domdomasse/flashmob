@@ -168,6 +168,25 @@
 .cours-toc-list {
   padding: 0;
 }
+.cours-toc-export {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 12px 14px;
+  margin: 0;
+  border: none;
+  border-top: 1px solid var(--border);
+  background: none;
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background var(--transition);
+}
+.cours-toc-export:active { opacity: 0.7; }
 
 /* ── Group = 1 section + its subs ── */
 .cours-toc-group {
@@ -244,7 +263,7 @@
   border: none;
   border-radius: 50%;
   background: var(--surface);
-  color: var(--text2);
+  color: var(--text);
   border: 1px solid var(--border);
   width: 42px;
   height: 42px;
@@ -284,8 +303,25 @@
   gap: 10px;
   margin-bottom: 12px;
 }
+.exercise-header.collapsed {
+  margin-bottom: 0;
+}
+.exercise-header + .section-body {
+  padding-top: 6px;
+}
+.exercise-header-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .exercise-header .exercise-duration {
   margin-left: auto;
+  flex-shrink: 0;
 }
 .exercise-type {
   font-size: 0.7rem;

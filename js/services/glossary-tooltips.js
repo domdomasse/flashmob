@@ -30,6 +30,9 @@ export async function loadGlossary(subjectId, chapterId) {
  * Scan a container for glossary terms and wrap them with clickable spans.
  * Call after content is rendered in DOM.
  */
+// Track active global listeners to avoid duplicates
+let globalListenersActive = false;
+
 export function attachGlossaryTooltips(container, glossary) {
   if (!glossary || glossary.size === 0) return;
 
@@ -46,9 +49,22 @@ export function attachGlossaryTooltips(container, glossary) {
     processTextNodes(textEl, regex, glossary);
   }
 
-  // Add tooltip dismiss on click outside or scroll
-  document.addEventListener('click', dismissTooltip);
-  window.addEventListener('scroll', dismissTooltip, { passive: true });
+  // Add tooltip dismiss on click outside or scroll (only once)
+  if (!globalListenersActive) {
+    document.addEventListener('click', dismissTooltip);
+    window.addEventListener('scroll', dismissTooltip, { passive: true });
+    globalListenersActive = true;
+  }
+}
+
+/** Remove global tooltip listeners (call on page cleanup) */
+export function detachGlossaryTooltips() {
+  if (globalListenersActive) {
+    document.removeEventListener('click', dismissTooltip);
+    window.removeEventListener('scroll', dismissTooltip);
+    dismissTooltip();
+    globalListenersActive = false;
+  }
 }
 
 function processTextNodes(element, regex, glossary) {

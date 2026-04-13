@@ -1,10 +1,16 @@
 let catalog = null;
-const cache = {};
+const MAX_CACHE = 20;
+const cache = new Map();
 
 export async function getCatalog() {
   if (!catalog) {
-    const res = await fetch('data/index.json');
-    catalog = await res.json();
+    try {
+      const res = await fetch('data/index.json');
+      if (!res.ok) return { subjects: [] };
+      catalog = await res.json();
+    } catch {
+      return { subjects: [] };
+    }
   }
   return catalog;
 }
@@ -16,12 +22,23 @@ export async function getSubject(subjectId) {
 
 export async function getChapterData(subjectId, chapterId, type) {
   const key = `${subjectId}/${chapterId}/${type}`;
-  if (!cache[key]) {
+  if (cache.has(key)) {
+    // Move to end (most recently used)
+    const val = cache.get(key);
+    cache.delete(key);
+    cache.set(key, val);
+    return val;
+  }
+  try {
     const res = await fetch(`data/${subjectId}/${chapterId}/${type}.json`);
     if (!res.ok) return null;
-    cache[key] = await res.json();
+    const data = await res.json();
+    cache.set(key, data);
+    if (cache.size > MAX_CACHE) cache.delete(cache.keys().next().value);
+    return data;
+  } catch {
+    return null;
   }
-  return cache[key];
 }
 
 /**

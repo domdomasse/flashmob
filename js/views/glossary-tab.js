@@ -108,6 +108,9 @@ export async function renderGlossaryTab(content, subjectId, chapterId) {
           letterBtns[l].classList.remove('active', 'dimmed');
         }
         btn.classList.add('active');
+        // Uncollapse le groupe si collapsed
+        const header = groups[letter].el.querySelector('.section-toggle');
+        if (header?.classList.contains('collapsed')) header.classList.remove('collapsed');
         countLabel.textContent = `${groups[letter].cards.length} définition${groups[letter].cards.length > 1 ? 's' : ''} — ${letter}`;
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -228,10 +231,10 @@ export async function renderGlossaryTab(content, subjectId, chapterId) {
     countLabel.textContent = `${visibleCount} résultat${visibleCount !== 1 ? 's' : ''}`;
   }
 
-  searchInput.addEventListener('input', runSearch);
+  const abortCtrl = new AbortController();
+  searchInput.addEventListener('input', runSearch, { signal: abortCtrl.signal });
 
   // ── Keyboard shortcut: / or Ctrl+K to focus search ──
-  const abortCtrl = new AbortController();
   document.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     if (e.key === '/' || (e.key === 'k' && (e.ctrlKey || e.metaKey))) {

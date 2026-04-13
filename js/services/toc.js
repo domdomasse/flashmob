@@ -45,7 +45,7 @@ function scrollToSection(target) {
   });
 }
 
-export function buildToc(container, sections, prefix = '') {
+export function buildToc(container, sections, prefix = '', { onExport } = {}) {
   const tocList = el('div', { class: 'cours-toc-list' });
 
   for (const section of sections) {
@@ -91,8 +91,19 @@ export function buildToc(container, sections, prefix = '') {
     tocList.appendChild(group);
   }
 
+  // Export PDF button (optional)
+  let exportBtn = null;
+  if (onExport) {
+    exportBtn = el('button', {
+      class: 'cours-toc-export',
+      'aria-label': 'Exporter en PDF',
+      onClick: (e) => { e.stopPropagation(); onExport(); }
+    }, icon('download', 14), ' PDF');
+  }
+
   const tocToggle = el('button', { class: 'cours-toc-toggle' }, 'Sommaire');
   const tocContent = el('div', { class: 'cours-toc-content' }, tocList);
+  if (exportBtn) tocContent.appendChild(exportBtn);
   tocContent.style.display = 'none';
 
   tocToggle.addEventListener('click', () => {

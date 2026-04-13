@@ -4,6 +4,7 @@ import { icon } from '../icons.js';
 import { renderMarkdown } from '../utils/markdown.js';
 import { loadGlossary, attachGlossaryTooltips } from '../services/glossary-tooltips.js';
 import { buildToc, slugify, buildBackToTop, activateScrollIndicator } from '../services/toc.js';
+import { exportContent } from '../services/export-pdf.js';
 
 export async function renderSummaryTab(container, subjectId, chapterId) {
   const data = await getChapterData(subjectId, chapterId, 'summary');
@@ -16,7 +17,10 @@ export async function renderSummaryTab(container, subjectId, chapterId) {
   }
 
   // Table of contents
-  container.appendChild(buildToc(container, data.sections, 's-'));
+  const chapterTitle = document.querySelector('.topbar h1')?.textContent || 'Résumé';
+  container.appendChild(buildToc(container, data.sections, 's-', {
+    onExport: () => exportContent(data, chapterTitle, 'summary')
+  }));
 
   // Sections (collapsible)
   for (const section of data.sections) {

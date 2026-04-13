@@ -55,9 +55,26 @@ Puis ouvrir `http://localhost:8080` dans le navigateur.
 
 L'outil admin permet de generer de nouveaux chapitres a partir de photos ou PDF de cours. Il necessite une cle API Claude.
 
-| Systeme | Fichier |
-|---------|---------|
-| **Linux** | `admin/start.sh` |
-| **Windows** | `admin/start.bat` |
+### Lancement rapide (script)
+
+| Systeme | Fichier | Action |
+|---------|---------|--------|
+| **Linux** | `admin/start.sh` | Double-clic ou `./admin/start.sh` dans le terminal |
+| **macOS** | `admin/start.command` | Double-clic (ouvre Terminal automatiquement) |
+| **Windows** | `admin/start.bat` | Double-clic |
 
 Le panneau admin se lance sur `http://localhost:8000`.
+
+### macOS — lancement manuel
+
+1. Ouvrir **Terminal** (Applications > Utilitaires > Terminal)
+2. Naviguer vers le dossier admin :
+   ```bash
+   cd /chemin/vers/flashmob/admin
+   ```
+3. Lancer le serveur :
+   ```bash
+   python3 -m http.server 8000
+   ```
+4. Ouvrir Safari ou Chrome a l'adresse `http://localhost:8000`
+5. Pour arreter le serveur : `Ctrl+C` dans le terminal
