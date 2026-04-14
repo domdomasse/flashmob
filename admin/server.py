@@ -27,9 +27,35 @@ Identifie :
 - Le titre complet du chapitre
 - Un identifiant court pour la matière (ex: geo, hist, maths, phys, svt, philo, ses, fr, en)
 - Un identifiant court pour le chapitre en snake_case (ex: chine, revolution_francaise, derivation)
-- Une icône Lucide adaptée à la matière (ex: globe pour géo, landmark pour histoire, calculator pour maths, atom pour physique, leaf pour SVT, brain pour philo, bar-chart pour SES, book-open pour français, languages pour anglais)
-- Une icône Lucide adaptée au chapitre
+- Une icône adaptée à la matière
+- Une icône custom SVG pour le chapitre (voir instructions ci-dessous)
 - Une couleur hex adaptée à la matière
+
+## Icône de matière (subjectIcon)
+
+Choisis parmi les icônes CUSTOMS existantes ou les icônes Lucide :
+- Customs existantes : "boussole" (géographie), "pagode" (Asie), "lanterne" (Chine)
+- Lucide : globe, landmark, calculator, atom, leaf, brain, bar-chart, book-open, languages, map, flask, dna, crown, scroll, pen-nib, scales, etc.
+
+## Icône de chapitre (chapterIconSvg) — GÉNÈRE UN SVG CUSTOM
+
+Dessine une icône SVG minimaliste et évocatrice du thème du chapitre.
+
+Contraintes SVG strictes :
+- ViewBox : 0 0 24 24
+- Style stroke uniquement : lignes, paths, cercles, ellipses, courbes Bézier (Q, C)
+- PAS de fill (sauf fill="currentColor" stroke="none" pour de petits éléments pleins comme des points)
+- Utilise uniquement : <line>, <path>, <circle>, <ellipse>, <rect>
+- Le dessin doit occuper la zone 3-21 en X et 2-22 en Y environ
+- Maximum 15 éléments SVG pour rester lisible en petite taille (24-40px)
+- Le résultat doit être reconnaissable et évoquer le sujet du chapitre
+
+Exemples de style :
+- Pagode : lignes de toits en V + piliers + cercle sommital
+- Lanterne : courbes Bézier pour le corps ovale + lignes pour les pompons
+- Boussole : cercles concentriques + aiguille en triangle
+
+Fournis UNIQUEMENT le contenu interne du SVG (sans la balise <svg> englobante).
 
 Réponds UNIQUEMENT avec ce JSON :
 
@@ -37,11 +63,12 @@ Réponds UNIQUEMENT avec ce JSON :
 {
   "subjectId": "geo",
   "subjectName": "Géographie",
-  "subjectIcon": "globe",
+  "subjectIcon": "boussole",
   "subjectColor": "#38bdf8",
   "chapterName": "La Chine : recompositions spatiales",
   "chapterId": "chine",
-  "chapterIcon": "map"
+  "chapterIcon": "chine",
+  "chapterIconSvg": "<path d=\\"M...\\" /><circle cx=\\"12\\" cy=\\"12\\" r=\\"3\\"/>"
 }
 ```"""
 
@@ -309,6 +336,46 @@ def update_index(config, card_count):
         f.write('\n')
 
 
+def update_icons(icon_name, icon_svg):
+    """Ajoute une icône custom dans icons.js si elle n'existe pas déjà."""
+    icons_path = FLASHMOB_DIR / 'js' / 'icons.js'
+    if not icons_path.exists() or not icon_name or not icon_svg:
+        return
+
+    with open(icons_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    # Déjà présente ?
+    if f'  {icon_name}:' in content or f'  {icon_name} :' in content:
+        return
+
+    # Nettoyer le SVG (enlever balise <svg> si Claude l'a incluse par erreur)
+    icon_svg = re.sub(r'</?svg[^>]*>', '', icon_svg).strip()
+
+    # Échapper les backticks pour le template literal JS
+    icon_svg = icon_svg.replace('`', '\\`')
+
+    # Insérer avant la fermeture du CUSTOM_ICONS
+    new_entry = (
+        f'  {icon_name}: {{\n'
+        f'    viewBox: \'0 0 24 24\',\n'
+        f'    strokeWidth: \'1\',\n'
+        f'    svg: `{icon_svg}`\n'
+        f'  }}'
+    )
+
+    # Trouver le dernier } avant }; (fin de CUSTOM_ICONS)
+    # On cherche le pattern "  }\n};" et on insère avant le "};"
+    content = re.sub(
+        r'(\n  \})\n(\};)',
+        rf'\1,\n{new_entry}\n\2',
+        content
+    )
+
+    with open(icons_path, 'w', encoding='utf-8') as f:
+        f.write(content)
+
+
 def update_sw(config):
     sw_path = FLASHMOB_DIR / 'sw.js'
     if not sw_path.exists():
@@ -415,6 +482,12 @@ class AdminHandler(http.server.SimpleHTTPRequestHandler):
         card_count = len(files.get('cards', {}).get('cards', []))
         update_index(config, card_count)
         update_sw(config)
+
+        # Enregistrer l'icône custom si présente
+        icon_svg = config.get('iconSvg', '')
+        icon_name = config.get('icon', '')
+        if icon_svg and icon_name:
+            update_icons(icon_name, icon_svg)
 
         self.respond_json({"ok": True, "path": str(chapter_dir)})
 

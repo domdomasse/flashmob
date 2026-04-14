@@ -32,7 +32,7 @@ export async function renderHome(container) {
 
     grid.appendChild(
       el('div', { class: 'subject-card', onClick: () => navigate(subject.id) },
-        el('span', { class: 'icon' }, icon(subject.icon, 28)),
+        el('span', { class: 'icon' }, icon(subject.icon, 40)),
         el('span', { class: 'name' }, subject.name),
         el('span', { class: 'meta' }, meta)
       )

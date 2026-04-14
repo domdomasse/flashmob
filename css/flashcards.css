@@ -661,28 +661,28 @@
 
 /* ── Shake feedback ── */
 .fc-shake-overlay {
-  position: absolute;
-  inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   pointer-events: none;
-  z-index: 300;
+  padding: 14px 0;
   opacity: 0;
+  height: 0;
+  overflow: visible;
 }
 .fc-shake-overlay.visible {
   animation: shake-pop 600ms ease-out forwards;
 }
 .fc-shake-overlay svg {
-  width: 48px;
-  height: 48px;
+  width: 32px;
+  height: 32px;
   color: var(--accent);
   filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
 }
 .fc-shake-overlay span {
-  position: absolute;
-  bottom: calc(50% - 40px);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
   color: var(--accent);
   letter-spacing: 0.5px;

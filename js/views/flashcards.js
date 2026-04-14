@@ -325,7 +325,7 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
   const shakeLabel = el('span', {}, 'Mélangé !');
   const shakeOverlay = el('div', { class: 'fc-shake-overlay' }, shakeIcon, shakeLabel);
 
-  const deckArea = el('div', { class: 'fc-deck-area' }, cardContainer, endEl, shakeOverlay);
+  const deckArea = el('div', { class: 'fc-deck-area' }, cardContainer, shakeOverlay, endEl);
 
   // Overlay + menu appended to body to escape ancestor overflow/transform/perspective clipping
   document.body.appendChild(filterOverlay);
@@ -511,13 +511,10 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
     cardContainer.style.display = '';
     endEl.classList.add('hidden');
 
-    // Fix counter widths based on total digits to avoid layout shift
+    // Fix progress counter width based on total digits to avoid layout shift
     const digits = String(deck.length).length;
     const counterWidth = (digits * 2 + 2) + 'ch'; // "XX/XX"
     progressText.style.minWidth = counterWidth;
-    const badgeWidth = digits + 'ch';
-    countGood.style.minWidth = badgeWidth;
-    countBad.style.minWidth = badgeWidth;
 
     renderCard();
   }
@@ -545,6 +542,8 @@ export async function renderFlashcardsEngine(container, allCardsRaw, categories,
     progressFill.style.width = (currentIdx / deck.length * 100) + '%';
     countGood.textContent = goodList.length;
     countBad.textContent = badList.length;
+    countGood.style.minWidth = String(goodList.length).length + 'ch';
+    countBad.style.minWidth = String(badList.length).length + 'ch';
     animating = false;
   }
 

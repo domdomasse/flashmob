@@ -35,6 +35,7 @@ function renderMarkdownToHtml(text) {
 }
 
 export function exportContent(data, title, type) {
+  const isMobile = window.innerWidth < 768;
   let body = '';
 
   for (const section of data.sections) {
@@ -191,6 +192,7 @@ export function exportContent(data, title, type) {
 <body>
   <div class="info">
     <strong>${title}</strong> — ${typeLabel}<br>
+    <button onclick="${isMobile ? 'history.back()' : 'window.close()'}" class="back-btn" style="margin-top:10px;margin-left:8px;padding:10px 24px;font-size:11pt;font-weight:700;color:#64748b;background:#e2e8f0;border:none;border-radius:8px;cursor:pointer"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg> Retour</button>
     <button onclick="window.print()" class="print-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg> Imprimer</button>
   </div>
   <div class="content">
@@ -208,5 +210,10 @@ export function exportContent(data, title, type) {
 
   const blob = new Blob([htmlContent], { type: 'text/html' });
   const url = URL.createObjectURL(blob);
-  window.open(url, '_blank');
+
+  if (isMobile) {
+    window.location.href = url;
+  } else {
+    window.open(url, '_blank');
+  }
 }

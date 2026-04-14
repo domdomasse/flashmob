@@ -254,6 +254,8 @@ async function analyzeImages() {
   analyzeStatus.classList.add('hidden');
 }
 
+let chapterIconSvg = '';  // SVG custom généré par Claude
+
 function fillConfig(info) {
   // Matière : sélectionner si elle existe déjà, sinon remplir les champs nouvelle matière
   const existingOption = [...subjectSelect.options].find(o => o.value === info.subjectId);
@@ -275,6 +277,9 @@ function fillConfig(info) {
   chapterId.value = info.chapterId || '';
   chapterId.dataset.manual = '1';
   $('#chapter-icon').value = info.chapterIcon || 'file-text';
+
+  // Stocker le SVG custom généré
+  chapterIconSvg = info.chapterIconSvg || '';
 
   // Indicateur visuel
   $('#auto-badge').classList.remove('hidden');
@@ -393,7 +398,8 @@ function getConfig() {
     subjectColor: isNew ? $('#subject-color').value : subjectSelect.selectedOptions[0]?.dataset.color || '#38bdf8',
     chapterId: chapterId.value.trim() || slugify(chapterName.value),
     chapterName: chapterName.value.trim(),
-    icon: $('#chapter-icon').value.trim() || 'file-text'
+    icon: $('#chapter-icon').value.trim() || 'file-text',
+    iconSvg: chapterIconSvg
   };
 }
 
