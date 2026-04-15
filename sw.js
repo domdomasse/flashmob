@@ -1,4 +1,4 @@
-const CACHE = 'flashmob-v3';
+const CACHE = 'flashmob-v4';
 
 // App shell only — data JSON files are cached dynamically on first access
 const PRECACHE = [

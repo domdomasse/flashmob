@@ -14,7 +14,7 @@
 /* ── Collapsible sections ── */
 .section-toggle {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
   cursor: pointer;
   -webkit-user-select: none;
@@ -26,6 +26,7 @@
   transition: transform 0.2s ease;
   color: var(--text-muted);
   display: flex;
+  margin-top: 6px;
 }
 .section-toggle.collapsed .section-chevron {
   transform: rotate(-90deg);
@@ -200,9 +201,9 @@
 /* Section row: chevron + label, centered vertically */
 .cours-toc-section {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
-  padding: 0 14px;
+  padding: 6px 14px;
   min-height: 32px;
   cursor: pointer;
   touch-action: manipulation;
@@ -217,6 +218,7 @@
   justify-content: center;
   width: 20px;
   height: 20px;
+  margin-top: 1px;
   transition: transform 0.2s ease;
   color: var(--text-muted);
 }
@@ -242,7 +244,7 @@
   display: flex;
   align-items: center;
   min-height: 28px;
-  padding: 0 14px 0 52px;
+  padding: 6px 14px 6px 52px;
   font-size: 0.8rem;
   color: var(--text-secondary);
   line-height: 1.35;
@@ -302,6 +304,9 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 12px;
+}
+.exercise-header .section-chevron {
+  margin-top: 0;
 }
 .exercise-header.collapsed {
   margin-bottom: 0;
@@ -721,6 +726,10 @@
   top: 60px;
   background: var(--bg);
   z-index: 10;
+  align-items: center;
+}
+.glossary-group-header .section-chevron {
+  margin-top: 0;
 }
 
 /* Cards */
