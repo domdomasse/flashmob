@@ -98,7 +98,7 @@ export async function renderSettings(container) {
     );
   }
 
-  const features = el('div', { class: 'section', style: 'margin-top: 24px' },
+  const features = el('div', { class: 'section' },
     el('div', { class: 'section-title' }, 'Fonctionnalités'),
     spacedToggle, timerToggle, ...(shakeToggle ? [shakeToggle] : [])
   );
@@ -142,7 +142,7 @@ export async function renderSettings(container) {
     }
   }}, icon('trash-2', 16), ' Tout effacer');
 
-  const dataSection = el('div', { class: 'section', style: 'margin-top: 24px' },
+  const dataSection = el('div', { class: 'section' },
     el('div', { class: 'section-title' }, 'Mes données'),
     el('div', { class: 'settings-btn-group' }, btnExport, btnImport, btnResetAll)
   );

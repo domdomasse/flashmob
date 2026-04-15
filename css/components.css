@@ -151,6 +151,10 @@
   border-bottom: 1px solid var(--border);
   min-height: var(--tap-size);
 }
+.section-title + .toggle-row,
+.section-title + .settings-btn-group {
+  padding-top: 0;
+}
 .toggle-row .label { font-size: 0.9rem; color: var(--text); }
 .toggle-row .sublabel { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
 

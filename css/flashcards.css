@@ -666,7 +666,7 @@
   align-items: center;
   gap: 6px;
   pointer-events: none;
-  padding: 14px 0;
+  padding: 24px 0;
   opacity: 0;
 }
 .fc-shake-overlay.visible {
